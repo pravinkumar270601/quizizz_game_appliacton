@@ -1,0 +1,35 @@
+/* toastStyles.css */
+.cust-ToastContainer {
+    width: 100vw !important; /* Full width */
+    height: 50px;
+  }
+  
+  .cust-toast {
+    background-color: #333; /* Dark background for toast */
+    color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    font-size: 25px;
+  }
+  
+  .cust-toast-success {
+    background-color: #4caf50 !important; /* Green for success */
+    color: white !important;
+  }
+  
+  .cust-toast-error {
+    background-color: #f44336 !important; /* Red for error */
+    color: white !important;
+  }
+
+  .cust-toast svg {
+    fill: white; /* Change the icon color to white */
+  }
+  
+  /* Customize the close button color */
+  .cust-toast-close-button {
+    color: white !important; /* Change the close button color to white */
+  }
+  

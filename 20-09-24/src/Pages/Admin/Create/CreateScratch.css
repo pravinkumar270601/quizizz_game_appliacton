@@ -1,0 +1,46 @@
+.icons_button{
+    border: 1px solid blueviolet;
+    color: white;
+    padding: 4px;
+    background-color: blueviolet;
+    border-radius: 2px;
+}
+
+
+.icons_button1{
+    border: 1px solid rgb(45 112 174);
+    color: white;
+    padding: 4px;
+    background-color: rgb(45 112 174);
+    border-radius: 2px;
+}
+.icons_button2{
+    border: 1px solid rgb(0 160 106);
+    color: white;
+    padding: 4px;
+    background-color: rgb(0 160 106);
+    border-radius: 2px;
+    font-size: 24px;
+}
+
+.icons_button3{
+    border: 1px solid rgb(229 124 26);
+    color: white;
+    padding: 4px;
+    background-color: rgb(229 124 26);
+    border-radius: 2px;
+    font-size: 24px;
+}
+
+.icons_button4{
+    border: 1px solid rgb(214 205 205 / 50%);
+    color: black;
+    padding: 4px;
+    background-color: rgb(214 205 205 / 50%);
+    border-radius: 2px;
+    font-size: 24px;
+}
+
+
+  
+
