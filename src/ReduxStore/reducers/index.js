@@ -26,6 +26,7 @@ import AdminSignUpPostSlice from '../Slices/SignUpLoginAll/AdminSignUpPost';
 // import AdminLoginPostSlice from '../Slices/SignUpLoginAll/AdminLoginPost';
 import getAllStudentsSlice from '../Slices/Student/getAllStudents' 
 import grantAccessToStudentSlice from '../Slices/Student/grantAccessToStudent';
+import StudentLoginPostSlice from '../Slices/SignUpLoginAll/StudentLoginPost';
 
 const reducer = combineReducers({
 
@@ -51,7 +52,7 @@ const reducer = combineReducers({
   StudentScorePost: StudentScorePostSlice,
 
   StudentSignUpPost: StudentSignUpPostSlice,
-  StudentSignUpPost: StudentSignUpPostSlice,
+  StudentLoginPost: StudentLoginPostSlice,
   AdminSignUpPost: AdminSignUpPostSlice,
   AdminLoginPost: AdminLoginPostSlice,
   getAllStudents: getAllStudentsSlice,

@@ -30,6 +30,7 @@ import { ErrorMessage } from "formik";
 import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify"
+import { setInitialStategrantAccessToStudent } from '../../../ReduxStore/Slices/Student/grantAccessToStudent'
 
 
 
@@ -147,66 +148,67 @@ const AllPublished = () => {
     }, [GetPublishByUserId?.data])
 
     const { getAllStudents } = useSelector((state) => state?.getAllStudents);
-  console.log(getAllStudents, "getAllStudents");
-  const [allStudentsData, setAllStudentsData] = useState([]);
-  console.log(allStudentsData, "allStudentsData");
+    console.log(getAllStudents, "getAllStudents");
+    const [allStudentsData, setAllStudentsData] = useState([]);
+    console.log(allStudentsData, "allStudentsData");
 
-  useEffect(() => {
-    console.log("my all student........");
+    useEffect(() => {
+        console.log("my all student........");
 
-    const data = {
-      data: {},
-      method: "get",
-      apiName: "getAllStudents",
+        const data = {
+            data: {},
+            method: "get",
+            apiName: "getAllStudents",
+        };
+        dispatch(actions.GETALLSTUDENTS(data));
+    }, []);
+    useEffect(() => {
+        const tempArr = [];
+        console.log(getAllStudents?.data, "inside useEffect");
+
+        getAllStudents?.data?.map((data, index) => {
+            return tempArr.push({
+                value: data?.student_id,
+                label: data?.email,
+            });
+        });
+        setAllStudentsData(tempArr);
+    }, [getAllStudents?.data]);
+
+    const { grantAccessToStudent } = useSelector(
+        (state) => state?.grantAccessToStudent
+    );
+    console.log(grantAccessToStudent, "grantAccessToStudent");
+
+    const grandAccessFn = (student_id, publish_id, staff_id) => {
+        console.log(student_id, "idddd");
+        console.log(typeof (publish_id), "idddd");
+        console.log(staff_id, "idddd");
+
+        const data = {
+            data: {
+                publish_id: parseInt(publish_id),
+                staff_id: staff_id,
+                student_id: parseInt(student_id),
+            },
+            method: "post",
+            apiName: "grantAccessToStudent",
+        };
+        dispatch(actions.GRANTACCESSTOSTUDENT(data));
     };
-    dispatch(actions.GETALLSTUDENTS(data));
-  }, []);
-  useEffect(() => {
-    const tempArr = [];
-    console.log(getAllStudents?.data, "inside useEffect");
 
-    getAllStudents?.data?.map((data, index) => {
-      return tempArr.push({
-        value: data?.student_id,
-        label: data?.email,
-      });
-    });
-    setAllStudentsData(tempArr);
-  }, [getAllStudents?.data]);
-
-  const { grantAccessToStudent } = useSelector(
-    (state) => state?.grantAccessToStudent
-  );
-  console.log(grantAccessToStudent, "grantAccessToStudent");
-
-  const grandAccessFn = (student_id, publish_id, staff_id) => {
-    console.log(student_id, "idddd");
-    console.log(typeof(publish_id), "idddd");
-    console.log(staff_id, "idddd");
-
-    const data = {
-      data: {
-        publish_id: parseInt(publish_id),
-        staff_id: staff_id,
-        student_id: parseInt(student_id),
-      },
-      method: "post",
-      apiName: "grantAccessToStudent",
-    };
-    dispatch(actions.GRANTACCESSTOSTUDENT(data));
-  };
-
-  useEffect(() => {
-    console.log(grantAccessToStudent.message, "grantAccessToStudent.Message");
-
-    if (
-      grantAccessToStudent.message==="Access already granted to this student"
-    ) {
-      toast.error(grantAccessToStudent.message);
-    }else{
-      toast.success(grantAccessToStudent.message)
-    }
-  }, [grantAccessToStudent]);
+    useEffect(() => {
+        console.log(grantAccessToStudent.message, "grantAccessToStudent.Message");
+        if (
+            grantAccessToStudent.message === "Access already granted to this student"
+        ) {
+            toast.error(grantAccessToStudent.message);
+            dispatch(setInitialStategrantAccessToStudent())
+        } else if (grantAccessToStudent.message === "Access granted successfully") {
+            toast.success(grantAccessToStudent.message);
+            dispatch(setInitialStategrantAccessToStudent())
+        }
+    }, [grantAccessToStudent]);
 
 
 
@@ -393,26 +395,7 @@ const AllPublished = () => {
                                 </Box>
                             </Box>
                         </Box>
-                        <Formik
-                            initialValues={{
-                                access: "",
-                            }}
-                        //   onSubmit={}
-                        >
-                            {({ isSubmitting, resetForm, setFieldValue }) => (
-                                <Form>
-                                    <CustFormDropDown
-                                        name="access"
-                                        options={allStudentsData}
-                                        custPlaceholder="Grant Access To Student"
-                                        grandAccessFn={grandAccessFn}
-                                        setFieldValue={setFieldValue}
-                                        publish_id={data.publish_id}
-                                        staff_id={data.staff_id}
-                                    />
-                                </Form>
-                            )}
-                        </Formik>
+
 
 
                         <Box
@@ -420,67 +403,104 @@ const AllPublished = () => {
                                 position: 'absolute',
                                 top: 16,
                                 right: 16,
+                                display:"flex"
                             }}
                         >
-                            <IconButton size="small" onClick={handleClick}>
-                                <MoreVertIcon />
-                            </IconButton>
+                            <Box>
+                                <Formik
+                                    initialValues={{
+                                        access: "",
+                                    }}
+                                //   onSubmit={}
+                                >
+                                    {({ isSubmitting, resetForm, setFieldValue }) => (
+                                        <Form>
+                                            <CustFormDropDown
+                                                name="access"
+                                                options={allStudentsData}
+                                                custPlaceholder="Grant Access To Student"
+                                                grandAccessFn={grandAccessFn}
+                                                setFieldValue={setFieldValue}
+                                                publish_id={data.publish_id}
+                                                staff_id={data.staff_id}
+                                            />
+                                        </Form>
+                                    )}
+                                </Formik>
+                            </Box>
+                            <Box>
+                                <IconButton size="small" onClick={handleClick}>
+                                    <MoreVertIcon />
+                                </IconButton>
 
-                            <Menu
-                                anchorEl={anchorEl}
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                                sx={{ boxShadow: "none" }}
-                                transitionDuration={0}
-                                PaperProps={{
-                                    sx: {
-                                        padding: 1,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: 1,
-                                        boxShadow: "none",
-                                        transition: "none",
-                                        transformOrigin: "unset",
-                                        transitionDuration: 100
-                                    },
-                                }}
-                            >
-                                <MenuItem onClick={handleClose}>
-                                    <Tooltip title="Delete">
-                                        <IconButton size="small">
-                                            <FaHeart sx={{ fontSize: 16 }} />
-                                        </IconButton>
-                                    </Tooltip>
-                                    Like
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                    <Tooltip title="Print">
-                                        <IconButton size="small">
-                                            <FaRegFolder sx={{ fontSize: 16 }} />
-                                        </IconButton>
-                                    </Tooltip>
-                                    Save
-                                </MenuItem>
-                                <MenuItem onClick={() => {
-                                    handleClose()
-                                    handleDeletePublish(data.publish_id)
-                                }
-                                }>
-                                    <Tooltip title="Settings">
-                                        <IconButton size="small">
-                                            <RiDeleteBin6Line sx={{ fontSize: 16 }} />
-                                        </IconButton>
-                                    </Tooltip>
-                                    Delete
-                                </MenuItem>
-                            </Menu>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                    sx={{ boxShadow: "none" }}
+                                    transitionDuration={0}
+                                    PaperProps={{
+                                        sx: {
+                                            padding: 1,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: 1,
+                                            boxShadow: "none",
+                                            transition: "none",
+                                            transformOrigin: "unset",
+                                            transitionDuration: 100
+                                        },
+                                    }}
+                                >
+                                    <MenuItem onClick={handleClose}>
+                                        <Tooltip title="Delete">
+                                            <IconButton size="small">
+                                                <FaHeart sx={{ fontSize: 16 }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                        Like
+                                    </MenuItem>
+                                    <MenuItem onClick={handleClose}>
+                                        <Tooltip title="Print">
+                                            <IconButton size="small">
+                                                <FaRegFolder sx={{ fontSize: 16 }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                        Save
+                                    </MenuItem>
+                                    <MenuItem onClick={() => {
+                                        handleClose()
+                                        handleDeletePublish(data.publish_id)
+                                    }
+                                    }>
+                                        <Tooltip title="Settings">
+                                            <IconButton size="small">
+                                                <RiDeleteBin6Line sx={{ fontSize: 16 }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                        Delete
+                                    </MenuItem>
+                                </Menu>
+                            </Box>
                         </Box>
 
                     </Box>
 
                 </Box>
             )}
-            <ToastContainer/>
+            <ToastContainer
+
+
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark" />
 
         </Grid>
     )

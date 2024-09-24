@@ -48,7 +48,13 @@ const grantAccessToStudentSlice = createSlice({
       error: false,
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialStategrantAccessToStudent : (state)=>{
+      state.grantAccessToStudent.loading= false
+      state.grantAccessToStudent.error= false
+      state.grantAccessToStudent.data= []
+      state.grantAccessToStudent.message = ''
+    }},
   extraReducers: (builder) => {
     builder.addCase(GRANTACCESSTOSTUDENT.fulfilled, (state, action) => {
       state.grantAccessToStudent = {
@@ -83,3 +89,4 @@ const grantAccessToStudentAction = {
 
 export { grantAccessToStudentAction };
 export default grantAccessToStudentSlice.reducer;
+export const {setInitialStategrantAccessToStudent} = grantAccessToStudentSlice.actions

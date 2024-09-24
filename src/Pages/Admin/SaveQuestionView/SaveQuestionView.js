@@ -985,6 +985,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import actions from "../../../ReduxStore/actions/index";
 import { IoIosCloseCircle } from "react-icons/io";
 import { adminUrl as baseUrl } from '../../../constants';
+import { toast, ToastContainer } from 'react-toastify';
+import { setInitialQuestionWithAnsPost } from '../../../ReduxStore/Slices/QuestionEdit/QuestionWithAnsPost';
 
 
 
@@ -1087,147 +1089,7 @@ const SaveQuestionView = () => {
   }]);
 
 
-  // const container1 = GetAllQuestion?.data?.map((data) => {
-  //   // Determine the media type and URL
-  //   let mediaType;
-  //   let mediaUrl;
 
-  //   if (data.questionImageUrl) {
-  //     mediaType = 'image';
-  //     mediaUrl = data.questionImageUrl;
-  //     console.log(mediaUrl, "questionImageUrl____image");
-  //   } else if (data.questionVideoUrl) {
-  //     mediaType = 'video';
-  //     mediaUrl = data.questionVideoUrl;
-  //     console.log(mediaUrl, "questionVideoUrl____");
-  //   } else if (data.questionAudioUrl) {
-  //     mediaType = 'audio';
-  //     mediaUrl = data.questionAudioUrl;
-  //     console.log(mediaUrl, "questionAudioUrl____audio");
-  //   } else {
-  //     mediaType = null; // Default value for media type
-  //     mediaUrl = null;  // Default value for media URL
-  //   }
-
-  //   // Parse the options and correct answers
-  //   const options = JSON.parse(data.options);
-  //   const correctAnswers = JSON.parse(data.correctAnswer); // Expecting correctAnswers to be an array of objects
-  //   console.log(correctAnswers, "correctAnswerPravin");
-  //   console.log(correctAnswers[0], "currentanswerwihindex");
-  //   const imageUrl = JSON.parse(data.optionsImageUrl) || []; // Default to empty array if null
-
-  //   // Return the mapped object for each question
-  //   return {
-  //     questionText: data.questionText,
-  //     mediaType: mediaType, // Assign media type
-  //     mediaUrl: mediaUrl,   // Assign media URL
-  //     imageUrls: imageUrl,
-  //     question_id: data.question_id,
-  //     questionType: JSON.parse(data.questionType),
-  //     questionPoint: JSON.parse(data.questionPoint),
-  //     questionTiming: JSON.parse(data.questionTiming),
-  //     choices: options.map((optionText, index) => {
-  //       // Get the corresponding image URL for the option
-  //       const optionImageUrl = imageUrl[index] || null;
-
-  //       // Check if the current option (text and image) is in the correctAnswers array
-  //       const isCorrect = correctAnswers.some(
-  //         (correctAnswer) =>
-  //           correctAnswer &&
-  //           correctAnswer.text &&
-  //           optionText &&
-  //           correctAnswer.text.trim() === optionText.trim() ||
-  //           correctAnswer.image === optionImageUrl
-  //       );
-
-  //       return {
-  //         imageurl: optionImageUrl,  // Assign specific image URL if available
-  //         text: optionText,
-  //         correct: isCorrect ? 'true' : 'false',  // Mark the correct option
-  //       };
-  //     }),
-  //   };
-  // });
-
-  // // console.log(container1, "container1container1");
-  // console.log("container1 data:", container1);
-
-  // container1.forEach((question) => {
-  //   console.log(question.question_id, "container1 question_id");
-  // });
-
-
-  // const container1 = GetAllQuestion?.data?.map((data) => {
-  //   // Determine the media type and URL
-  //   let mediaType;
-  //   let mediaUrl;
-  
-  //   if (data.questionImageUrl) {
-  //     mediaType = 'image';
-  //     mediaUrl = data.questionImageUrl;
-  //     console.log(mediaUrl, "questionImageUrl____image");
-  //   } else if (data.questionVideoUrl) {
-  //     mediaType = 'video';
-  //     mediaUrl = data.questionVideoUrl;
-  //     console.log(mediaUrl, "questionVideoUrl____");
-  //   } else if (data.questionAudioUrl) {
-  //     mediaType = 'audio';
-  //     mediaUrl = data.questionAudioUrl;
-  //     console.log(mediaUrl, "questionAudioUrl____audio");
-  //   } else {
-  //     mediaType = null; // Default value for media type
-  //     mediaUrl = null;  // Default value for media URL
-  //   }
-  
-  //   // Safely parse options and correctAnswers
-  //   let options = [];
-  //   let correctAnswers = [];
-  //   try {
-  //     options = JSON.parse(data.options);
-  //   } catch (error) {
-  //     console.error('Error parsing options:', error);
-  //   }
-  
-  //   try {
-  //     correctAnswers = JSON.parse(data.correctAnswer);
-  //   } catch (error) {
-  //     console.error('Error parsing correctAnswer:', error);
-  //   }
-  
-  //   const imageUrl = JSON.parse(data.optionsImageUrl) || []; // Default to empty array if null
-  
-  //   // Return the mapped object for each question
-  //   return {
-  //     questionText: data.questionText,
-  //     mediaType: mediaType, // Assign media type
-  //     mediaUrl: mediaUrl,   // Assign media URL
-  //     imageUrls: imageUrl,
-  //     question_id: data.question_id,
-  //     questionType: JSON.parse(data.questionType),
-  //     questionPoint: JSON.parse(data.questionPoint),
-  //     questionTiming: JSON.parse(data.questionTiming),
-  //     choices: Array.isArray(options) ? options.map((optionText, index) => {
-  //       // Get the corresponding image URL for the option
-  //       const optionImageUrl = imageUrl[index] || null;
-  
-  //       // Check if the current option (text and image) is in the correctAnswers array
-  //       const isCorrect = correctAnswers.some(
-  //         (correctAnswer) =>
-  //           correctAnswer &&
-  //           correctAnswer.text &&
-  //           optionText &&
-  //           correctAnswer.text.trim() === optionText.trim() ||
-  //           correctAnswer.image === optionImageUrl
-  //       );
-  
-  //       return {
-  //         imageurl: optionImageUrl,  // Assign specific image URL if available
-  //         text: optionText,
-  //         correct: isCorrect ? 'true' : 'false',  // Mark the correct option
-  //       };
-  //     }) : [], // Default to empty array if options is not an array
-  //   };
-  // });
 
 
   const container1 = GetAllQuestion?.data?.map((data) => {
@@ -1343,6 +1205,18 @@ const SaveQuestionView = () => {
   const hanlePublishPageNavigate=()=>{
     navigate("/publish")
   }
+  // const { QuestionWithAnsPost } = useSelector((state) => state?.QuestionWithAnsPost);
+
+  useEffect(() => {
+    console.log(QuestionWithAnsPost.message, "QuestionWithAnsPost.Message");
+    if (QuestionWithAnsPost.message==="SUCCESS"){
+
+      toast.success("Question Savesd Successfully")
+      dispatch(setInitialQuestionWithAnsPost())
+      
+    }
+  }, [QuestionWithAnsPost]);
+
 
   return (
     <Formik
@@ -1695,11 +1569,24 @@ const SaveQuestionView = () => {
 
             </Container>
             <PublishContentModal open={publishModal} onClose={handlePublishModalClose} />
+            <ToastContainer
+                  position="top-right" // or "top-center", "bottom-left", etc.
+                  autoClose={5000} // Auto close duration in ms
+                  hideProgressBar={false} // Hide or show progress bar
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="dark" 
+            />
           </Box>
         </Form >
       )}
-
+     
     </Formik >
+    
   );
 };
 

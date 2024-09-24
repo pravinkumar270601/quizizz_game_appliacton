@@ -48,7 +48,15 @@ const AdminLoginPostSlice = createSlice({
       error: false, 
     },
   },
-  reducers: {},
+  // reducers: {},
+  reducers: {
+    setInitialStateOfAdminLoginPost: (state) => {
+      state.AdminLoginPost.loading = false
+      state.AdminLoginPost.error = false
+      state.AdminLoginPost.data = []
+      state.AdminLoginPost.message = ''
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(ADMINLOGINPOST.fulfilled, (state, action) => {
       state.AdminLoginPost = {
@@ -83,3 +91,5 @@ const AdminLoginPostAction = {
 
 export { AdminLoginPostAction };
 export default AdminLoginPostSlice.reducer;
+
+export const {setInitialStateOfAdminLoginPost} = AdminLoginPostSlice.actions

@@ -23,6 +23,7 @@ import { GetAllPublishesWithStudentAction } from "../Slices/Student/GetAllPublis
 import { StudentScorePostAction } from "../Slices/Student/StudentScorePost";
 import { getAllStudentsAction } from "../Slices/Student/getAllStudents";
 import { grantAccessToStudentAction } from "../Slices/Student/grantAccessToStudent";
+import { StudentLoginPostAction } from "../Slices/SignUpLoginAll/StudentLoginPost";
 
 const actions = {
 
@@ -49,7 +50,7 @@ const actions = {
  ...StudentScorePostAction,
 
  ...StudentSignUpPostAction,
- ...StudentSignUpPostAction,
+ ...StudentLoginPostAction,
  ...AdminSignUpPostAction,
  ...AdminLoginPostAction,
  ...getAllStudentsAction,

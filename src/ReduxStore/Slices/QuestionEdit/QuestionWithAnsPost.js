@@ -44,7 +44,14 @@ const QuestionWithAnsPostSlice = createSlice({
       error: false, 
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialQuestionWithAnsPost : (state)=>{
+      state.QuestionWithAnsPost.loading= false
+      state.QuestionWithAnsPost.error= false
+      state.QuestionWithAnsPost.data= []
+      state.QuestionWithAnsPost.message = ''
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(QUESTIONWITHANSPOST.fulfilled, (state, action) => {
       state.QuestionWithAnsPost = {
@@ -79,3 +86,6 @@ const QuestionWithAnsPostAction = {
 
 export { QuestionWithAnsPostAction };
 export default QuestionWithAnsPostSlice.reducer;
+export const {setInitialQuestionWithAnsPost} = QuestionWithAnsPostSlice.actions
+
+

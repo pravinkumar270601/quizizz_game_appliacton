@@ -12,7 +12,7 @@ import { defaultReject, defaultState } from "../../../constants";
 import { fetchData } from "../../helpers";
 // PublishPost
 // PUBLISHPOST
-const   STUDENTLOGINPOST= createAsyncThunk(
+const STUDENTLOGINPOST = createAsyncThunk(
   "StudentLoginPost/StudentLoginPost",
   // eslint-disable-next-line default-param-last
   async (
@@ -46,11 +46,18 @@ const StudentLoginPostSlice = createSlice({
   initialState: {
     StudentLoginPost: {
       ...defaultState.List,
-      loading: false, 
-      error: false, 
+      loading: false,
+      error: false,
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialStateOfStudentLoginPost: (state) => {
+      state.StudentLoginPost.loading = false
+      state.StudentLoginPost.error = false
+      state.StudentLoginPost.data = []
+      state.StudentLoginPost.message = 'false'
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(STUDENTLOGINPOST.fulfilled, (state, action) => {
       state.StudentLoginPost = {
@@ -80,8 +87,9 @@ const StudentLoginPostSlice = createSlice({
 });
 
 const StudentLoginPostAction = {
-    STUDENTLOGINPOST,
+  STUDENTLOGINPOST,
 };
 
 export { StudentLoginPostAction };
 export default StudentLoginPostSlice.reducer;
+export const {setInitialStateOfStudentLoginPost} = StudentLoginPostSlice.actions
