@@ -50,7 +50,14 @@ const AdminSignUpPostSlice = createSlice({
       error: false, 
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialStateOfAdminSignUpPost: (state) => {
+      state.AdminSignUpPost.loading = false
+      state.AdminSignUpPost.error = false
+      state.AdminSignUpPost.data = []
+      state.AdminSignUpPost.message = ''
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(ADMINSIGNUPPOST.fulfilled, (state, action) => {
       state.AdminSignUpPost = {
@@ -85,3 +92,4 @@ const AdminSignUpPostAction = {
 
 export { AdminSignUpPostAction };
 export default AdminSignUpPostSlice.reducer;
+export const {setInitialStateOfAdminSignUpPost} = AdminSignUpPostSlice.actions

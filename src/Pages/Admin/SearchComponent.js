@@ -2,17 +2,27 @@ import React from 'react';
 import { Box, TextField, InputAdornment, Typography, IconButton, Avatar, Stack } from '@mui/material';
 import { ChevronRight } from '@mui/icons-material';
 import TemplateCards from './Cards/TemplateCards';
+import math_image from "../../Assets/subject-math.png"
+import subject_english from "../../Assets/subject-english.png"
+import subject_social_studies from "../../Assets/subject-social-studies.png"
+import subject_world_languages from "../../Assets/subject-world-languages.png"
+import subject_science from "../../Assets/subject-science.png"
+import subject_computers from "../../Assets/subject-computers.png"
+import subject_career from "../../Assets/subject-career-ed-professional-development.png"
+import  subject_arts_music from "../../Assets/subject-arts-music.png"
+import subject_physical from "../../Assets/subject-physical-ed.png"
+
 
 const subjects = [
-  { name: 'Math', imgSrc: 'https://cf.quizizz.com/image/subject-math.png' },
-  { name: 'English', imgSrc: 'https://cf.quizizz.com/image/subject-english.png' },
-  { name: 'Social Studies', imgSrc: 'https://cf.quizizz.com/image/subject-social-studies.png' },
-  { name: 'Languages', imgSrc: 'https://cf.quizizz.com/image/subject-world-languages.png' },
-  { name: 'Science', imgSrc: 'https://cf.quizizz.com/image/subject-science.png' },
-  { name: 'Computers', imgSrc: 'https://cf.quizizz.com/image/subject-computers.png' },
-  { name: 'Career Ed', imgSrc: 'https://cf.quizizz.com/image/subject-career-ed-professional-development.png' },
-  { name: 'Creative Arts', imgSrc: 'https://cf.quizizz.com/image/subject-arts-music.png' },
-  { name: 'Health & PE', imgSrc: 'https://cf.quizizz.com/image/subject-physical-ed.png' },
+  { name: 'Math', imgSrc: math_image },
+  { name: 'English', imgSrc:  subject_english},
+  { name: 'Social Studies', imgSrc:  subject_social_studies},
+  { name: 'Languages', imgSrc: subject_world_languages },
+  { name: 'Science', imgSrc: subject_science },
+  { name: 'Computers', imgSrc:  subject_computers},
+  { name: 'Career Ed', imgSrc:subject_career },
+  { name: 'Creative Arts', imgSrc:  subject_arts_music},
+  { name: 'Health & PE', imgSrc: subject_physical},
 ];
 
 const SearchComponent = () => {

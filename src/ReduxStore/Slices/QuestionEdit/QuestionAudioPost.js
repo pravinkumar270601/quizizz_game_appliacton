@@ -44,7 +44,14 @@ const QuestionAudioPostSlice = createSlice({
       error: false, 
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialStateOfQuestionAudioPost: (state) => {
+      state.QuestionAudioPost.loading = false
+      state.QuestionAudioPost.error = false
+      state.QuestionAudioPost.data = []
+      state.QuestionAudioPost.message = ''
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(QUESTIONAUDIOPOST.fulfilled, (state, action) => {
       state.QuestionAudioPost = {
@@ -79,3 +86,4 @@ const QuestionAudioPostAction = {
 
 export { QuestionAudioPostAction };
 export default QuestionAudioPostSlice.reducer;
+export const {setInitialStateOfQuestionAudioPost} = QuestionAudioPostSlice.actions

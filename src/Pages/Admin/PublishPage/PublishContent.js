@@ -28,6 +28,8 @@ import { PiBooksDuotone } from "react-icons/pi";
 
 
 const PublishContent = () => {
+    const sessionStaffName = sessionStorage.getItem('sessionStaffName');
+
 
     const navigate = useNavigate()
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md')); // Detect medium and smaller devices
@@ -97,8 +99,8 @@ const PublishContent = () => {
             }
 
             setGetPublishByIdData(PublishheadContent)
-            console.log(PublishheadContent,"PublishheadContentPublishheadContent");
-            
+            console.log(PublishheadContent, "PublishheadContentPublishheadContent");
+
         }
 
     }, [GetPublishById?.data])
@@ -209,7 +211,7 @@ const PublishContent = () => {
             questionText: data.questionText,
             mediaType: mediaType, // Assign media type
             mediaUrl: mediaUrl,   // Assign media URL
-            imageUrls: imageUrl,
+            imageUrls: [],
             question_id: data.question_id,
             questionType: JSON.parse(data.questionType),
             questionPoint: JSON.parse(data.questionPoint),
@@ -219,16 +221,17 @@ const PublishContent = () => {
                 const optionImageUrl = imageUrl[index] || null;
 
                 // Check if the current option (text and image) is in the correctAnswers array
-                const isCorrect = correctAnswers.some(
-                    (correctAnswer) =>
-                        correctAnswer &&
-                        ((correctAnswer.text && optionText && correctAnswer.text.trim() === optionText.trim()) ||
-                            (correctAnswer.image && optionImageUrl && correctAnswer.image === optionImageUrl))
-                );
+                const isCorrect = correctAnswers.filter(correctAnswer =>
+                    correctAnswer &&
+                    (
+                        (correctAnswer.text && optionText && correctAnswer.text === optionText.text) ||
+                        (correctAnswer.image && optionText && correctAnswer.image === optionText.image)
+                    )
+                ).length > 0;
 
                 return {
-                    imageurl: optionImageUrl,  // Assign specific image URL if available
-                    text: optionText,
+                    imageurl: optionText.image,  // Assign specific image URL if available
+                    text: optionText.text,
                     correct: isCorrect ? 'true' : 'false',  // Mark the correct option
                 };
             }) : [], // Default to empty array if options is not an array
@@ -269,7 +272,7 @@ const PublishContent = () => {
 
 
     return (
-        <Box>
+        <Box data-aos="fade-up" data-aos-duration="1000">
             <Box
                 sx={{
                     position: 'relative',
@@ -322,9 +325,9 @@ const PublishContent = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1 }}>
                             <Button sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Typography variant="h6" component="span">
-                                {GetPublishByIdData.name}
+                                    {GetPublishByIdData.name}
                                 </Typography>
-                                
+
                             </Button>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'start', flexWrap: 'wrap', flexDirection: "column" }}>
@@ -406,7 +409,7 @@ const PublishContent = () => {
                     />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant="caption" component="a" href="/profile/66c04925271abea6d497c8a1" color="text.primary" sx={{ textDecoration: 'none' }}>
-                            UserName
+                            {sessionStaffName}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
                             1 question
@@ -418,7 +421,7 @@ const PublishContent = () => {
             <Grid>
 
                 {container1?.map((container, index) => (
-                    <Grid container spacing={2} key={index} mt={3}>
+                    <Grid container spacing={2} key={index} mt={3} >
                         <Grid item xs={12}>
                             <Paper
                                 sx={{
@@ -519,7 +522,7 @@ const PublishContent = () => {
                                                         ) : (
                                                             <IoIosCloseCircle style={{ height: "25px", width: "30px", color: 'red' }} />
                                                         )}
-                                                        {choice.imageurl !== null ? (
+                                                        {choice.imageurl !== "" ? (
                                                             <>
                                                                 <Box
                                                                     component="img"

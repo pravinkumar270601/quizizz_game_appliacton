@@ -2720,6 +2720,7 @@ import { adminUrl as baseUrl } from "../../constants";
 // import { adminUrl as baseUrl } from "../../constants";
 import { useDispatch } from 'react-redux';
 import actions from "../../ReduxStore/actions/index";
+import { setInitialStateOfQuestionImageUpload } from "../../ReduxStore/Slices/QuestionEdit/QuestionImageUpload";
 
 const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -2746,6 +2747,9 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
   // console.log(image,"imagenn")
   const dispatch = useDispatch();
   console.log(videoURL, "videoUrlLLLLKAXKSK")
+
+  const [image, setImage] = useState(null)
+  // const [image, setImage] = useState('');
 
   console.log(questionImage, "questionImage///////////")
 
@@ -2853,7 +2857,7 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
 
   const { QuestionImageUpload } = useSelector((state) => state?.QuestionImageUpload);
   const { ImageUploadPost } = useSelector((state) => state?.ImageUploadPost);
-  console.log(ImageUploadPost, "ImageUploadPostvvvvvvvvvvvvvvvvvvvvvvv")
+  console.log(QuestionImageUpload, "ImageUploadPostvvvvvvvvvvvvvvvvvvvvvvv")
 
   const [isReadyToCrop, setIsReadyToCrop] = useState(false); // State to control when cropping should happen
 
@@ -2862,7 +2866,7 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
     if (QuestionImageUpload?.data?.imageUrl) {
       setIsReadyToCrop(true);
       // handleCrop()
-      
+
     } else {
       setIsReadyToCrop(false); // Reset if imageUrl is not available
     }
@@ -2884,6 +2888,12 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
       dispatch(actions.QUESTIONIMAGEUPLOAD(data3));
     }
 
+
+    // setQuestionImage("");
+  };
+
+
+  useEffect(() => {
     if (QuestionImageUpload?.data?.imageUrl) {
       console.log("Image URL is available, cropping...");
       const imageUrl = QuestionImageUpload.data.imageUrl;
@@ -2894,13 +2904,12 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
       setQuestionImage(fullImageUrl);
       console.log(fullImageUrl, "fullImage123")
       setOpenDialog(false);
+      dispatch(setInitialStateOfQuestionImageUpload())
+      setImage(null)
     } else {
       console.error('ImageUploadPost or imageUrl is undefined');
     }
-    // setQuestionImage("");
-  };
-
-
+  }, [QuestionImageUpload?.data, dispatch])
 
 
   console.log(croppedImage, "croppinnngg")
@@ -2981,9 +2990,9 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
                         placeholder={custPlaceholder || "Enter Input"}
                         {...rest}
                         className={`custominput-field2 ${isFocused ? "focused-placeholder" : ""}`}
-                        style={{fontSize:"20px"}}
-                      // onFocus={handleFocus}
-                      // onBlur={handleBlur}
+                        style={{ fontSize: "20px" }}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
                       />
                     </div>
                   </div>
@@ -3011,7 +3020,7 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
                   // onMouseEnter={() => setHover(true)}
                   // onMouseLeave={() => setHover(false)}
                   >
-                    <IconButton
+                    {/* <IconButton
                       color="primary"
                       onClick={handleDeleteAudio}
                       className="delete-button"
@@ -3023,15 +3032,37 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
                         background: "white",
                         height: '25px',
                         width: '25px',
-                        color: 'black',
+                        color: 'white',
                         position: 'absolute',
                         top: '10px',
                         right: '10px',
                         opacity: hover ? 1 : 0, // Show on hover
                       }}
                     >
-                      <Delete style={{ fontSize: '15px' }} />
+                      <Delete style={{ fontSize: '15px' ,color:"white"}} />
+                    </IconButton> */}
+                    <IconButton
+                      color="primary"
+                      onClick={handleDeleteAudio}
+                      className="delete-button"
+                      style={{
+                        backgroundColor: 'transparent',
+                        transition: 'background-color 0.3s, opacity 0.3s', // Smooth transition for hover effect
+                        border: '1px solid white',
+                        borderRadius: '3px',
+                        background: "white", // Keep background white
+                        height: '25px',
+                        width: '25px',
+                        color: 'white',
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        opacity: hover ? 1 : 0, // Show on hover
+                      }}
+                    >
+                      <Delete style={{ fontSize: '15px', color: 'black' }} /> {/* Change the icon color to black */}
                     </IconButton>
+
 
                     <CustomAudioPlayer updateAudioURL={updateAudioURL} />
                   </Grid>
@@ -3048,9 +3079,9 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
                         placeholder={custPlaceholder || "Enter Input"}
                         {...rest}
                         className={`custominput-field2 ${isFocused ? "focused-placeholder" : ""}`}
-                        style={{fontSize:"20px"}}
-                      // onFocus={handleFocus}
-                      // onBlur={handleBlur}
+                        style={{ fontSize: "20px" }}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
                       />
                     </div>
                   </div>
@@ -3134,9 +3165,9 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
                         placeholder={custPlaceholder || 'Enter Input'}
                         {...rest}
                         className={`custominput-field2 ${isFocused ? 'focused-placeholder' : ''}`}
-                        style={{fontSize:"20px"}}
-                      // onFocus={handleFocus}
-                      // onBlur={handleBlur}
+                        style={{ fontSize: "20px" }}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
                       />
                     </div>
                   </div>
@@ -3173,9 +3204,9 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
                         placeholder={custPlaceholder || "Enter Input"}
                         {...rest}
                         className={`custominput-field1 ${isFocused ? "focused-placeholder" : ""}`}
-                        style={{fontSize:"20px"}}
-                      // onFocus={handleFocus}
-                      // onBlur={handleBlur}
+                        style={{ fontSize: "20px" }}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
                       />
                     </div>
                   </div>
@@ -3189,8 +3220,8 @@ const CustomInputIcon = ({ label, name, inputType, custPlaceholder, value, onCha
         open={openDialog}
         onClose={handleCloseDialog}
         onCrop={handleCrop}
-        // image={image}
-        // setImage={setImage}
+        image={image}
+        setImage={setImage}
         setQuestionImage={setQuestionImage}
         setCroppedImage={setCroppedImage}
       />

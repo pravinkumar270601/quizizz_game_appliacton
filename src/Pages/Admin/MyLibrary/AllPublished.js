@@ -31,8 +31,13 @@ import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify"
 import { setInitialStategrantAccessToStudent } from '../../../ReduxStore/Slices/Student/grantAccessToStudent'
+import CustomDropdownWithSwitch from '../../../Components/CustomDropdownWithSwitch/CustomDropdownWithSwitch';
 
+import { FcUnlock } from "react-icons/fc";
 
+import { FaUnlockKeyhole } from "react-icons/fa6";
+import { setInitialStateGrantAccessToMultiStudentPost } from '../../../ReduxStore/Slices/Student/GrantAccessToMultiStudentPost';
+import { setInitialStateRevokeAccessToMultiStudentPost } from '../../../ReduxStore/Slices/Student/RevokeAccessToStudentPost';
 
 
 
@@ -41,6 +46,9 @@ import { setInitialStategrantAccessToStudent } from '../../../ReduxStore/Slices/
 
 
 const AllPublished = () => {
+    const sessionStaffId = parseInt(sessionStorage.getItem('sessionStaffId'));
+    const sessionStaffName = sessionStorage.getItem('sessionStaffName');
+
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState(null);
@@ -68,6 +76,7 @@ const AllPublished = () => {
     const { DeletePublishById } = useSelector((state) => state?.DeletePublishById);
 
     const handleDeletePublish = (publishid) => {
+        console.log(publishid, "Deletepublishid");
         if (publishid) {
             const data1 = {
                 data: {},
@@ -86,7 +95,6 @@ const AllPublished = () => {
 
             console.log(publishid, "publishid");
 
-
             dispatch(setQuizPlayPublishId(publishid))
 
             navigate("/admin/countdown")
@@ -100,7 +108,7 @@ const AllPublished = () => {
         const data1 = {
             data: {},
             method: "get",
-            apiName: "getPublishByStaffId/staff/1",
+            apiName: `getPublishByStaffId/staff/${sessionStaffId}`,
         };
 
         dispatch(actions.GETPUBLISHBYUSERID(data1));
@@ -152,16 +160,19 @@ const AllPublished = () => {
     const [allStudentsData, setAllStudentsData] = useState([]);
     console.log(allStudentsData, "allStudentsData");
 
-    useEffect(() => {
-        console.log("my all student........");
+    // useEffect(() => {
+    //     console.log("my all student........");
 
-        const data = {
-            data: {},
-            method: "get",
-            apiName: "getAllStudents",
-        };
-        dispatch(actions.GETALLSTUDENTS(data));
-    }, []);
+    //     const data = {
+    //         data: {},
+    //         method: "get",
+    //         apiName: "getAllStudents",
+    //     };
+    //     dispatch(actions.GETALLSTUDENTS(data));
+    // }, []);
+
+    const { GetAllPublishesWithStudent } = useSelector((state) => state?.GetAllPublishesWithStudent);
+    const [loadingStudents, setLoadingStudents] = useState(true);
     useEffect(() => {
         const tempArr = [];
         console.log(getAllStudents?.data, "inside useEffect");
@@ -170,10 +181,12 @@ const AllPublished = () => {
             return tempArr.push({
                 value: data?.student_id,
                 label: data?.email,
+                access_granted: data?.access_granted,
             });
         });
         setAllStudentsData(tempArr);
-    }, [getAllStudents?.data]);
+        setLoadingStudents(false)
+    }, [getAllStudents?.data, GetAllPublishesWithStudent]);
 
     const { grantAccessToStudent } = useSelector(
         (state) => state?.grantAccessToStudent
@@ -197,25 +210,154 @@ const AllPublished = () => {
         dispatch(actions.GRANTACCESSTOSTUDENT(data));
     };
 
+    const { GrantAccessToMultiStudentPost } = useSelector(
+        (state) => state?.GrantAccessToMultiStudentPost
+    );
+
     useEffect(() => {
-        console.log(grantAccessToStudent.message, "grantAccessToStudent.Message");
-        if (
-            grantAccessToStudent.message === "Access already granted to this student"
-        ) {
-            toast.error(grantAccessToStudent.message);
-            dispatch(setInitialStategrantAccessToStudent())
-        } else if (grantAccessToStudent.message === "Access granted successfully") {
-            toast.success(grantAccessToStudent.message);
-            dispatch(setInitialStategrantAccessToStudent())
+        console.log(GrantAccessToMultiStudentPost.message, "grantAccessToStudent.Message");
+        if (GrantAccessToMultiStudentPost.message === "Access granted successfully") {
+            toast.success(GrantAccessToMultiStudentPost.message);
+            dispatch(setInitialStateGrantAccessToMultiStudentPost())
         }
-    }, [grantAccessToStudent]);
+    }, [GrantAccessToMultiStudentPost]);
 
 
+    // /////////////////////\
+    const [openDropdown, setOpenDropdown] = useState(null);
+
+
+    const { RevokeAccessToMultiStudentPost } = useSelector(
+        (state) => state?.RevokeAccessToMultiStudentPost
+    );
+    useEffect(() => {
+        console.log(RevokeAccessToMultiStudentPost.message, "grantAccessToStudent.Message");
+        if (RevokeAccessToMultiStudentPost.message === "Access revoked successfully") {
+            toast.warn(RevokeAccessToMultiStudentPost.message);
+            dispatch(setInitialStateRevokeAccessToMultiStudentPost())
+        }
+    }, [RevokeAccessToMultiStudentPost]);
+
+
+    
+
+    const [toggledSwitches, setToggledSwitches] = useState({});
+    const handleSubmitAccsee = (publishId, values) => {
+        console.log("submit publish ", publishId);
+        console.log("submit values: ", values);
+        console.log("submit toggledSwitches", toggledSwitches);
+        if (Object.keys(toggledSwitches).length === 0) {
+            toast.error("please select student to access");
+        }
+
+        if (Object.keys(toggledSwitches).length === 0) {
+            console.log("The object is empty.");
+            // toast.error("please select student to access");
+        } else {
+            const formattedData = toggledSwitches
+                .filter((item) => item.access_granted === true) // Filter for access_granted true
+                .map((item) => ({
+                    publish_id: publishId, // Use the publishId passed as an argument
+                    staff_id: sessionStaffId,
+                    student_id: item.student_id, // Extract student_id from each entry
+                }));
+            if (formattedData.length!==0) {
+                const data = {
+                    data: formattedData,
+                    method: "post",
+                    apiName: "grantAccessToMultiStudent",
+                };
+                dispatch(actions.GRANTACCESSTOMULTISTUDENTPOST(data));
+            }
+
+        }
+        if (Object.keys(toggledSwitches).length === 0) {
+            console.log("The object is empty.");
+            // toast.error("please select student to access");
+        } else {
+            const formattedData = toggledSwitches
+                .filter((item) => item.access_granted === false) // Filter for access_granted true
+                .map((item) => ({
+                    publish_id: publishId, // Use the publishId passed as an argument
+                    staff_id: sessionStaffId,
+                    student_id: item.student_id, // Extract student_id from each entry
+                }));
+
+            if (formattedData.length!==0) {
+                const data = {
+                    data: formattedData,
+                    method: "post",
+                    apiName: "revokeAccessToMultiStudent",
+                };
+                dispatch(actions.REVOKEACCESSTOMULTISTUDENTPOST(data));
+            }
+
+
+
+
+        }
+
+        setToggledSwitches({})
+    };
+
+
+    // Update the switch state in the parent state (allStudentsData) when the switch is toggled
+    const handleSwitchChange = (studentId, accessGranted) => {
+        const updatedData = allStudentsData.map((student) =>
+            student.value === studentId
+                ? { ...student, access_granted: accessGranted }
+                : student
+        );
+        setToggledSwitches((prev = []) => {
+            // Ensure 'prev' is an array
+            if (!Array.isArray(prev)) {
+                prev = [];
+            }
+
+            const existingIndex = prev.findIndex(
+                (entry) => entry.student_id === studentId
+            );
+
+            if (existingIndex !== -1) {
+                // Update the existing student's access_granted value
+                const updatedSwitches = [...prev];
+                updatedSwitches[existingIndex].access_granted = accessGranted;
+                return updatedSwitches;
+            }
+
+            // If not found, add a new entry for the student
+            return [...prev, { student_id: studentId, access_granted: accessGranted }];
+        });
+        setAllStudentsData(updatedData); // Update the parent state
+    };
+
+
+    const updateStudentsData = async (publishId) => {
+        const data = {
+            data: {},
+            method: "get",
+            apiName: `getStudentsWithAccessByPublishId/publish/${publishId}`,
+        };
+        // Dispatch the action and handle the response to update the allStudentsData
+        dispatch(actions.GETALLSTUDENTS(data))
+        setLoadingStudents(true);
+
+    };
 
     return (
         <Grid>
-            {allPublishData.map((data) =>
-                <Box
+            {allPublishData.length === 0 && (
+                <h1 style={{
+                    position: "absolute",
+                    top: "55%",
+                    left: "65%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center"
+                }}>There is no publish!!</h1>
+            )
+            }
+            {allPublishData.map((data, index) =>
+                <Box data-aos="zoom-in" data-aos-duration="1000"
                     sx={{
                         position: 'relative',
                         borderRadius: 1,
@@ -258,12 +400,14 @@ const AllPublished = () => {
                                         alignItems: 'center',
                                         borderRadius: 1,
                                         border: '1px solid',
-                                        borderColor: 'divider',
+                                        borderColor: '#ffc93333',
                                         fontSize: '0.75rem',
+                                        backgroundColor: '#ffc93333'
                                     }}
                                 >
-                                    <Typography variant="caption" color="text.secondary">
-                                        quiz
+
+                                    <Typography variant="caption" color="rgb(232 169 0)" fontWeight="600">
+                                        Publish Id: {data.publish_id}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -316,7 +460,7 @@ const AllPublished = () => {
                                     />
                                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                                         <Typography variant="caption" component="a" href="/profile/66c04925271abea6d497c8a1" color="text.primary" sx={{ textDecoration: 'none' }}>
-                                            UserName
+                                            {sessionStaffName}
                                         </Typography>
                                         <Typography variant="caption" color="text.secondary">
                                             <LuDot /> 2days ago
@@ -335,15 +479,19 @@ const AllPublished = () => {
                                     </Box>
                                     <Box>
                                         <Button
-                                            onClick={handleClick1}
+                                            // onClick={handleClick1}
+                                            onClick={() => {
+                                                // handleClose1()
+                                                handleQuizzPlay(data.publish_id)
+                                            }}
                                             variant="outlined"
-                                            endIcon={<FaCaretDown />}
+                                            // endIcon={<FaCaretDown />}
                                             textDecoration="none"
-                                            style={{ backgroundColor: "rgb(136 84 192)", fontSize: "14px", color: "white", border: "1px solid #f4f4f4", height: "30px", width: "80px", }}>
-                                            Play
+                                            style={{ backgroundColor: "rgb(136 84 192)", fontSize: "14px", color: "white", border: "1px solid #f4f4f4", height: "30px", width: "100px", }}>
+                                            Preview
                                         </Button>
 
-                                        <Menu
+                                        {/* <Menu
                                             anchorEl={anchorEl2}
                                             open={Boolean(anchorEl2)}
                                             onClose={handleClose1}
@@ -389,7 +537,7 @@ const AllPublished = () => {
                                                 </Tooltip>
                                                 Preview
                                             </MenuItem>
-                                        </Menu>
+                                        </Menu> */}
                                     </Box>
 
                                 </Box>
@@ -403,27 +551,47 @@ const AllPublished = () => {
                                 position: 'absolute',
                                 top: 16,
                                 right: 16,
-                                display:"flex"
+                                display: "flex"
                             }}
                         >
                             <Box>
                                 <Formik
+                                    key={data.publish_id}
                                     initialValues={{
-                                        access: "",
+                                        [`accessControl${data.publish_id}`]: allStudentsData,
                                     }}
-                                //   onSubmit={}
+                                    onSubmit={(values) => handleSubmitAccsee(data.publish_id, values)}
                                 >
                                     {({ isSubmitting, resetForm, setFieldValue }) => (
                                         <Form>
-                                            <CustFormDropDown
-                                                name="access"
-                                                options={allStudentsData}
-                                                custPlaceholder="Grant Access To Student"
-                                                grandAccessFn={grandAccessFn}
-                                                setFieldValue={setFieldValue}
-                                                publish_id={data.publish_id}
-                                                staff_id={data.staff_id}
-                                            />
+                                            <Box sx={{ display: "flex", mt: 0.5 }}>
+
+                                                <CustomDropdownWithSwitch
+
+                                                    name={`accessControl${data.publish_id}`}
+                                                    options={allStudentsData}
+                                                    formikValues={allStudentsData} // Pass the latest formik state
+                                                    isOpen={openDropdown === index}
+                                                    publishId={data.publish_id}
+                                                    allStudentsData={allStudentsData}
+                                                    toggleDropdown={() => {
+                                                        //  Toggle dropdown state
+                                                        setOpenDropdown(
+                                                            openDropdown === index ? null : index
+                                                        ); // Close if already open, open if not
+                                                        updateStudentsData(data.publish_id);
+                                                    }}
+                                                    onSwitchChange={handleSwitchChange}
+                                                    loading={loadingStudents}
+                                                />
+                                                <Button type="submit" sx={{
+                                                    height: "30px", borderRadius: "5px", border: "1px solid",
+                                                    // background: "#4F75FF",
+                                                    fontSize: "12px",
+                                                    color: "black",
+                                                    borderColor: "rgb(136, 84, 192)"
+                                                }}> <FaUnlockKeyhole style={{ fontSize: "16px", marginRight: "2px", color: "black" }} />Access</Button>
+                                            </Box>
                                         </Form>
                                     )}
                                 </Formik>
@@ -487,7 +655,8 @@ const AllPublished = () => {
                     </Box>
 
                 </Box>
-            )}
+            )
+            }
             <ToastContainer
 
 
@@ -502,7 +671,7 @@ const AllPublished = () => {
                 pauseOnHover
                 theme="dark" />
 
-        </Grid>
+        </Grid >
     )
 }
 

@@ -52,7 +52,14 @@ const StudentSignUpPostSlice = createSlice({
       error: false, 
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialStateOfStudentSignUpPost: (state) => {
+      state.StudentSignUpPost.loading = false
+      state.StudentSignUpPost.error = false
+      state.StudentSignUpPost.data = []
+      state.StudentSignUpPost.message = ''
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(STUDENTSIGNUPPOST.fulfilled, (state, action) => {
       state.StudentSignUpPost = {
@@ -87,3 +94,4 @@ const StudentSignUpPostAction = {
 
 export { StudentSignUpPostAction };
 export default StudentSignUpPostSlice.reducer;
+export const {setInitialStateOfStudentSignUpPost} = StudentSignUpPostSlice.actions

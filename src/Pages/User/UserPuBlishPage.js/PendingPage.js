@@ -38,6 +38,8 @@ import { GrScorecard } from "react-icons/gr";
 
 
 const PendingPage = () => {
+    const sessionStudentName = sessionStorage.getItem('sessionStudentName');
+
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState(null);
@@ -92,18 +94,21 @@ const PendingPage = () => {
     const { StudentScorePost } = useSelector((state) => state?.StudentScorePost);
     console.log(StudentScorePost, "StudentScorePost")
 
-
+    const sessionStudentId = parseInt(sessionStorage.getItem('sessionStudentId'));
+    const { grantAccessToStudent } = useSelector(
+        (state) => state?.grantAccessToStudent
+    );
 
     useEffect(() => {
         const data1 = {
             data: {},
             method: "get",
-            apiName: `getAllPublishesWithStudentScore/student/${1}`,
+            apiName: `getAllPublishesWithStudentScore/student/${sessionStudentId}`,
         };
 
         dispatch(actions.GETALLWITHPUBLISHWITHSTUEDENT(data1));
 
-    }, [])
+    }, [grantAccessToStudent])
 
 
     const [allPublishData, setAllPublishData] = useState([])
@@ -153,9 +158,20 @@ const PendingPage = () => {
 
     return (
         <Grid sx={{ padding: "20px" }}>
+            {allPublishData.length === 0 && (
+                <h1 style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center"
+                }}>There is no pending!!</h1>
+            )
+            }
             {allPublishData.map((data) => {
+               
                 if (data.status === "pending") {
-                    return <Box
+                    return <Box data-aos="zoom-in" data-aos-duration="1000"
                         sx={{
                             position: 'relative',
                             borderRadius: 1,
@@ -273,7 +289,7 @@ const PendingPage = () => {
                                         />
                                         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                                             <Typography variant="caption" component="a" href="/profile/66c04925271abea6d497c8a1" color="text.primary" sx={{ textDecoration: 'none' }}>
-                                                UserName
+                                                {sessionStudentName}
                                             </Typography>
                                             <Typography variant="caption" color="text.secondary">
                                                 <LuDot /> 2days ago
@@ -423,15 +439,15 @@ const PendingPage = () => {
 
                     </Box>
                 }
-                else {
-                    return <h1 style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        textAlign: "center"
-                    }}>There is no pending!!</h1>
-                }
+                // else {
+                //     return <h1 style={{
+                //         position: "absolute",
+                //         top: "50%",
+                //         left: "50%",
+                //         transform: "translate(-50%, -50%)",
+                //         textAlign: "center"
+                //     }}>There is no pending!!</h1>
+                // }
             }
 
             )

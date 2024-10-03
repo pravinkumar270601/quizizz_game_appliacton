@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./CustomInputLogin.css";
 // import "../ComponentsCss/componet.css";
 import { Field, ErrorMessage } from "formik";
+import { colors } from "@mui/material";
 
 const CustomInputLogin = ({ label, name,custPlaceholder,inputType, ...rest }) => {
   const validateInput = (value) => {
@@ -31,12 +32,14 @@ const CustomInputLogin = ({ label, name,custPlaceholder,inputType, ...rest }) =>
           name={name}
           type={inputType}
           placeholder={`${custPlaceholder?custPlaceholder:"Enter Input"}`}
+          // autoComplete="off" // Disable autofill 
           {...rest}
           className='custominput-field12'
-          validate={validateInput}
+        
+          // validate={validateInput}
          
         />
-        <ErrorMessage name={name} component="div" className="inputs-error-msg" />
+        <ErrorMessage name={name} component="div" className="inputs-error-msg" style={{color:"red"}} />
       </div>
     </div>
   );

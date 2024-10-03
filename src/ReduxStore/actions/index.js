@@ -24,6 +24,10 @@ import { StudentScorePostAction } from "../Slices/Student/StudentScorePost";
 import { getAllStudentsAction } from "../Slices/Student/getAllStudents";
 import { grantAccessToStudentAction } from "../Slices/Student/grantAccessToStudent";
 import { StudentLoginPostAction } from "../Slices/SignUpLoginAll/StudentLoginPost";
+import { GetStudentInfoByPublishIdAction } from "../Slices/StudentInfo/GetStudentInfoByPublishId";
+import { GrantAccessToMultiStudentPostAction } from "../Slices/Student/GrantAccessToMultiStudentPost";
+import { RevokeAccessToMultiStudentPostAction } from "../Slices/Student/RevokeAccessToStudentPost";
+import { UserReportGetAllStudentAction } from "../Slices/StudentInfo/UserReportGetAllStudent";
 
 const actions = {
 
@@ -55,6 +59,10 @@ const actions = {
  ...AdminLoginPostAction,
  ...getAllStudentsAction,
   ...grantAccessToStudentAction,
+  ...GetStudentInfoByPublishIdAction,
+  ...GrantAccessToMultiStudentPostAction,
+  ...RevokeAccessToMultiStudentPostAction,
+  ...UserReportGetAllStudentAction,
  
   
 

@@ -44,7 +44,14 @@ const ImageUploadPostSlice = createSlice({
       error: false, 
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialStateOfImageUploadPost: (state) => {
+      state.ImageUploadPost.loading = false
+      state.ImageUploadPost.error = false
+      state.ImageUploadPost.data = []
+      state.ImageUploadPost.message = ''
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(IMAGEUPLOADPOST.fulfilled, (state, action) => {
       state.ImageUploadPost = {
@@ -79,3 +86,5 @@ const ImageUploadPostAction = {
 
 export { ImageUploadPostAction };
 export default ImageUploadPostSlice.reducer;
+
+export const {setInitialStateOfImageUploadPost} = ImageUploadPostSlice.actions

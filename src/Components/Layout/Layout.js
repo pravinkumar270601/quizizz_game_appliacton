@@ -102,6 +102,9 @@ import SearchComponent from '../../Pages/Admin/SearchComponent';
 import QuizEditor from '../../Pages/Admin/Create/QuizEditor';
 import PublishContent from '../../Pages/Admin/PublishPage/PublishContent';
 import MyLibrary from '../../Pages/Admin/MyLibrary/MyLibrary';
+import StudentReport from '../../Pages/Admin/StudentReport/StudentReport';
+import StudentWithPublishId from '../../Pages/Admin/StudentReport/StudentWithPublishId';
+import UserReports from '../../Pages/Admin/UserReports/UserReports';
 
 const Layout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -138,7 +141,12 @@ const Layout = () => {
             <Route path='/publish' element={<PublishContent />}/>
             {/* <Route path="/quizeditor" element={<QuizEditor />} /> */}
              <Route path="/mylibrary" element={<MyLibrary />} />
+             <Route path="/student-report" element={<StudentReport />} />
+             <Route path="/student-report/:publishId" element={<StudentWithPublishId />} />
+             <Route path="/user-report" element={<UserReports />} />
           </Routes>
+         
+
         </Box>
       </Box>
     </Box>

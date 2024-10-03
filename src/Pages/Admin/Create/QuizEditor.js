@@ -23,8 +23,8 @@ import StartForm from './StartForm';
 import WorksheetTabs from "./WorsheetTabs"
 import CreateScratch from './CreateScratch';
 
-const QuizEditor = () => {
-  const [selectedComponent, setSelectedComponent] = useState("WorksheetTabs");
+const QuizEditor = ({selectedComponent,setSelectedComponent}) => {
+  // const [selectedComponent, setSelectedComponent] = useState("WorksheetTabs");
 
   const handleComponentChange = (component) => {
     setSelectedComponent(component);

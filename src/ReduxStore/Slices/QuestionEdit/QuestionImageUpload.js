@@ -44,7 +44,14 @@ const QuestionImageUploadSlice = createSlice({
       error: false, 
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialStateOfQuestionImageUpload: (state) => {
+      state.QuestionImageUpload.loading = false
+      state.QuestionImageUpload.error = false
+      state.QuestionImageUpload.data = []
+      state.QuestionImageUpload.message = ''
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(QUESTIONIMAGEUPLOAD.fulfilled, (state, action) => {
       state.QuestionImageUpload = {
@@ -79,3 +86,5 @@ const QuestionImageUploadAction = {
 
 export { QuestionImageUploadAction };
 export default QuestionImageUploadSlice.reducer;
+export const {setInitialStateOfQuestionImageUpload} = QuestionImageUploadSlice.actions
+

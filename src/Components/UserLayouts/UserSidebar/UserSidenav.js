@@ -23,6 +23,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 
 import { RxExit } from "react-icons/rx";
 // import CreateButton from './CreateButton';
+import logo_user from "../../../Assets/logo_user.jpg"
 
 
 
@@ -38,6 +39,7 @@ import { RxExit } from "react-icons/rx";
 const UserSidenav = ({ open, onClose }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const sessionStudentName = sessionStorage.getItem('sessionStudentName');
 
 
 
@@ -76,13 +78,17 @@ const UserSidenav = ({ open, onClose }) => {
               alignItems: 'center',
               justifyContent: 'center',
               margin: "5px 0px",
-              height: '40px'
+              height: '40px',
+              // borderRadius:"20px",
+              marginTop:"5px"
+
             }}
           >
             <img
-              src="https://cf.quizizz.com/img/logos/Purple.webp"
+              // src="https://cf.quizizz.com/img/logos/Purple.webp"
+              src={logo_user}
               alt="logo"
-              style={{ height: '40px', width: '146px' }}
+              style={{ height: '45px', width: '146px' ,marginTop:"5px",borderRadius:"5px"}}
             />
           </Box>
         </NavLink>
@@ -90,7 +96,7 @@ const UserSidenav = ({ open, onClose }) => {
         <Box sx={{ p: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
             <NavLink to="/profile/66c04925271abea6d497c8a1" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
-              <Typography sx={{ fontSize: '15px', fontWeight: "bold" }}>Mr. K</Typography>
+              <Typography sx={{ fontSize: '15px', fontWeight: "bold" ,color:"white"}}>Mr.{sessionStudentName}</Typography>
             </NavLink>
             {/* <Badge
             badgeContent="Basic account"
@@ -218,7 +224,7 @@ const UserSidenav = ({ open, onClose }) => {
                 Settings
               </Box>
             </NavLink>
-            <NavLink to="/user/memes" style={{ textDecoration: 'none' }}>
+            {/* <NavLink to="/user/memes" style={{ textDecoration: 'none' }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -231,8 +237,8 @@ const UserSidenav = ({ open, onClose }) => {
                 <TbPhotoCog style={{marginRight:"10px"}} />
                 Memes
               </Box>
-            </NavLink>
-            <NavLink to="/profile/66c04925271abea6d497c8a1?section=collections" style={{ textDecoration: 'none' }}>
+            </NavLink> */}
+            {/* <NavLink to="/profile/66c04925271abea6d497c8a1?section=collections" style={{ textDecoration: 'none' }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -245,7 +251,7 @@ const UserSidenav = ({ open, onClose }) => {
                 <CiFolderOn style={{marginRight:"10px"}} />
                 Collections
               </Box>
-            </NavLink>
+            </NavLink> */}
             <NavLink to="/profile/66c04925271abea6d497c8a1?section=library" style={{ textDecoration: 'none' }}>
               <Box
                 sx={{

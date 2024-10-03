@@ -588,6 +588,12 @@ import { Box, Typography, Modal, Card, CardContent } from '@mui/material';
 import { useNavigate } from "react-router-dom"
 import QuizEditor from './QuizEditor';
 import CreateNewActivity from './CreateNewActivity';
+import tik_quiz_solid_circle from "../../../Assets/quiz_solid_circle.png"
+
+import presentation_solid_circle from "../../../Assets/presentation_solid_circle.png"
+import reading_solid from "../../../Assets/reading-quiz_solid_circle.png"
+import video_quiz_solid_circle from "../../../Assets/video-quiz_solid_circle.png"
+
 
 const CreationModal = ({ open, onClose }) => {
     return (
@@ -645,23 +651,23 @@ const CreationModal = ({ open, onClose }) => {
                         }}
                     >
                         <ButtonCard
-                            imageSrc="https://cf.quizizz.com/image/icons/quiz_solid_circle.png"
+                            imageSrc={tik_quiz_solid_circle}
                             title="Quiz"
                             description="Reflect on student understanding of skills and concepts by creating quizzes or practice opportunities."
                         />
                         <ButtonCard
-                            imageSrc="https://cf.quizizz.com/image/icons/presentation_solid_circle.png"
+                            imageSrc={presentation_solid_circle}
                             title="Lesson"
                             description="Teach new topics or skills to the whole class with interactive slides."
                         />
                         <ButtonCard
-                            imageSrc="https://cf.quizizz.com/image/icons/video-quiz_solid_circle.png"
+                            imageSrc={video_quiz_solid_circle}
                             title="Interactive video"
                             description="Make asynchronous assignments into active learning experiences."
                             infoText="Free up to 10 videos"
                         />
                         <ButtonCard
-                            imageSrc="https://cf.quizizz.com/image/icons/reading-quiz_solid_circle.png"
+                            imageSrc={reading_solid}
                             title="Passage"
                             description="Help students analyze text or media and improve comprehension skills."
                             infoText="Free up to 10 passages"

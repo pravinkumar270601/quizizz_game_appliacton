@@ -23,6 +23,9 @@ import { FaRegUserCircle } from "react-icons/fa";
 
 import { RxExit } from "react-icons/rx";
 import CreateButton from './CreateButton';
+import logo from "../../Assets/Purple.webp"
+import logo1 from "../../Assets/Cygnusa_Branding.jpg"
+
 
 
 
@@ -38,6 +41,9 @@ import CreateButton from './CreateButton';
 const Sidebar = ({ open, onClose }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const sessionStaffName = sessionStorage.getItem('sessionStaffName');
+  
+
 
 
 
@@ -73,14 +79,16 @@ const Sidebar = ({ open, onClose }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: "5px 0px",
-              height: '40px'
+              paddingLeft: "20px",paddingTop:"5px"
+              // margin: "5px 0px",
+              // height: '40px'
             }}
           >
             <img
-              src="https://cf.quizizz.com/img/logos/Purple.webp"
+              // src="https://cf.quizizz.com/img/logos/Purple.webp"
+              src={logo1}
               alt="logo"
-              style={{ height: '40px', width: '146px' }}
+              style={{ height: '100%', width: '100%' }}
             />
           </Box>
         </NavLink>
@@ -88,7 +96,7 @@ const Sidebar = ({ open, onClose }) => {
         <Box sx={{ p: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
             <NavLink to="/profile/66c04925271abea6d497c8a1" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
-              <Typography sx={{ fontSize: '15px', fontWeight: "bold" }}>Mr. K</Typography>
+              <Typography sx={{ fontSize: '15px', fontWeight: "bold" }}>Mr.{sessionStaffName}</Typography>
             </NavLink>
             {/* <Badge
             badgeContent="Basic account"
@@ -210,7 +218,7 @@ const Sidebar = ({ open, onClose }) => {
                 />
               </Box>
             </NavLink> */}
-            <NavLink to="/admin/reports" style={{ textDecoration: 'none' }}>
+            <NavLink to="/admin/student-report" style={{ textDecoration: 'none' }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -223,7 +231,7 @@ const Sidebar = ({ open, onClose }) => {
                 Reports
               </Box>
             </NavLink>
-            <NavLink to="/admin/classes" style={{ textDecoration: 'none' }}>
+            <NavLink to="/admin/user-report" style={{ textDecoration: 'none' }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -233,7 +241,7 @@ const Sidebar = ({ open, onClose }) => {
                 }}
               >
                 <PiUsersThreeFill style={{marginRight:"10px"}} />
-                Classes
+                User Reports
               </Box>
             </NavLink>
             <NavLink to="/admin/settings" style={{ textDecoration: 'none' }}>
@@ -249,19 +257,8 @@ const Sidebar = ({ open, onClose }) => {
                 Settings
               </Box>
             </NavLink>
-            <NavLink to="/admin/memes" style={{ textDecoration: 'none' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  p: 2,
-                  color: theme.palette.text.primary
-                }}
-              >
-                <TbPhotoCog style={{marginRight:"10px"}} />
-                Memes
-              </Box>
-            </NavLink>
+         
+             {/* 
             <NavLink to="/profile/66c04925271abea6d497c8a1?section=collections" style={{ textDecoration: 'none' }}>
               <Box
                 sx={{
@@ -287,7 +284,7 @@ const Sidebar = ({ open, onClose }) => {
                 <FaRegUserCircle style={{marginRight:"10px"}} />
                 Profile
               </Box>
-            </NavLink>
+            </NavLink> */}
             <Box
               sx={{
                 display: 'flex',
@@ -304,7 +301,7 @@ const Sidebar = ({ open, onClose }) => {
 
           <Divider />
 
-          <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {/* <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Typography variant="body2" color="text.secondary" textAlign="center">
               Try our AI Chrome extension
             </Typography>
@@ -313,7 +310,7 @@ const Sidebar = ({ open, onClose }) => {
               alt="AI Chrome extension"
               style={{ border: '1px solid', borderRadius: '4px', marginTop: '16px', height: '49px', width: '160px' }}
             />
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </Drawer>

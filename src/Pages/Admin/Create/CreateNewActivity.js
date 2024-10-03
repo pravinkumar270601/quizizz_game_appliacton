@@ -748,12 +748,15 @@ import QuizEditor from './QuizEditor'; // Import the QuizEditor component
 import { Slide } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group'; // Import TransitionGroup
 import StartForm from './StartForm';
+import import_image from "../../../Assets/import_image.png"
+import create_scratch_image from "../../../Assets/create_scratch_image.png"
+
 
 const CreateNewActivity = () => {
     const navigate = useNavigate();
     const [activeComponent, setActiveComponent] = useState(''); // State to track which component to render
     const [slideDirection, setSlideDirection] = useState('left'); // State to control slide direction
-
+    const [selectedComponent, setSelectedComponent] = useState("");
     // Handle back navigation
     const handleBackNavigation = () => {
         if (activeComponent === 'QuizEditor') {
@@ -765,9 +768,10 @@ const CreateNewActivity = () => {
     };
 
     // Handle the first box click to render the QuizEditor component
-    const handleCreation = () => {
+    const handleCreation = (selectcom) => {
         setSlideDirection('left'); // Set slide direction for forward navigation
         setActiveComponent('QuizEditor');
+        setSelectedComponent(selectcom)
     };
 
     return (
@@ -803,7 +807,7 @@ const CreateNewActivity = () => {
                 <Slide direction={slideDirection} in={true} mountOnEnter unmountOnExit>
                     <Box sx={{ width: '100%' }}>
                         {activeComponent === 'QuizEditor' ? (
-                            <QuizEditor /> 
+                            <QuizEditor selectedComponent={selectedComponent} setSelectedComponent={setSelectedComponent}/>
                             //   <StartForm /> 
                         ) : (
                             <Box sx={{ m: 10 }}>
@@ -813,7 +817,7 @@ const CreateNewActivity = () => {
                                     </Typography>
                                 </Box>
                                 <Box
-                                    
+
                                     sx={{
                                         padding: 2,
                                         marginTop: 2,
@@ -827,7 +831,7 @@ const CreateNewActivity = () => {
                                     <Grid container spacing={4} justifyContent="center">
                                         <Grid item xs={12} md={4}>
                                             <Box
-                                                onClick={handleCreation}
+                                                onClick={()=>handleCreation("WorksheetTabs")}
                                                 sx={{
                                                     border: '2px solid',
                                                     borderRadius: 2,
@@ -843,7 +847,7 @@ const CreateNewActivity = () => {
                                                     }
                                                 }}
                                             >
-                                                <img src="https://cf.quizizz.com/CreateWithAIV2/Source%20abstractions-min.png" alt="Import worksheets" style={{ width: '100%' }} />
+                                                <img src={import_image} alt="Import worksheets" style={{ width: '100%' }} />
                                                 <Box sx={{ padding: 2 }}>
                                                     <Typography variant="body1" fontWeight="bold">Import worksheets/questions</Typography>
                                                     <Typography variant="body2">from documents, Google Forms, spreadsheets</Typography>
@@ -852,6 +856,7 @@ const CreateNewActivity = () => {
                                         </Grid>
                                         <Grid item xs={12} md={4}>
                                             <Box
+                                                onClick={()=>handleCreation("AnotherComponent")}
                                                 sx={{
                                                     border: '1px solid',
                                                     borderRadius: 2,
@@ -867,7 +872,7 @@ const CreateNewActivity = () => {
                                                     }
                                                 }}
                                             >
-                                                <img src="https://cf.quizizz.com/CreateWithAIV2/Source%20abstractions-2-min.png" alt="Create from scratch" style={{ width: '100%' }} />
+                                                <img src={create_scratch_image} alt="Create from scratch" style={{ width: '100%' }} />
                                                 <Box sx={{ padding: 2 }}>
                                                     <Typography variant="body1" fontWeight="bold">Create from scratch</Typography>
                                                     <Typography variant="body2">from search, question types</Typography>

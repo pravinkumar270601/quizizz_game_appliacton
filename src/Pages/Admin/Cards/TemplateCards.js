@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography, IconButton, Button, Card, CardMedia, CardContent, Grid, Container } from '@mui/material';
 import { Star, ChevronRight } from '@mui/icons-material';
 import CardComponent from './CardComponent';
+import card_image from "../../../Assets/card_imageemoj.png"
 
 const TemplateCards = () => {
     return (
@@ -36,7 +37,7 @@ const TemplateCards = () => {
             <CardComponent
               title="Daily Check-in"
               description="4 Questions"
-              imageUrl="https://quizizz.com/media/resource/gs/quizizz-media/quizzes/d9f3c5cb-226b-4429-a00f-2aa456c70935?w=400&h=400"
+              imageUrl={card_image}
               type="QUIZ"
               questions="4"
               plays="173.4K"

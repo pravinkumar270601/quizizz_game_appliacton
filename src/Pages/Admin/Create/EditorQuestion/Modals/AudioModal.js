@@ -28,6 +28,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux';
 import actions from "../../../../../ReduxStore/actions/index";
 import AudioUpload from '../AudioUpload';
+import { setInitialStateOfQuestionAudioPost } from '../../../../../ReduxStore/Slices/QuestionEdit/QuestionAudioPost';
 
 
 
@@ -147,19 +148,11 @@ const AudioModal = ({ open, onClose, onAudioInsert, audioURL, setAudioURL, setUp
   const handleInsert = async () => {
     if (audioURL) {
       setUpdateAudioUrl(audioURL);
+      console.log(selectedAudio,"selectedAudioselectedAudioselectedAudio")
       // console.log(selectedAudio, "Updateaudiouelsssssddjjdhjdj")
       const formData = new FormData();
-        formData.append('audio', selectedAudio);
-        // try {
-        //   const response = await axios.post('http://localhost:4000/api/v1/uploadAudio', formData, {
-        //     headers: {
-        //       'Content-Type': 'multipart/form-data', // Ensure the request is recognized as form data
-        //     },
-        //   });
-        //   console.log('Audio uploaded successfully:', response.data);
-        // } catch (error) {
-        //   console.error('Error uploading audio:', error);
-        // }
+      formData.append('audio', selectedAudio);
+   
     
 
       const data3 = {
@@ -175,74 +168,6 @@ const AudioModal = ({ open, onClose, onAudioInsert, audioURL, setAudioURL, setUp
 
   const { QuestionAudioPost } = useSelector((state) => state?.QuestionAudioPost);
   console.log(QuestionAudioPost, "QuestionAudioPost")
-
-  // const handleInsert = async () => {
-  //   if (audioURL) {
-  //     try {
-  //       // Fetch the Blob data from the Blob URL
-  //       const response = await fetch(audioURL);
-  //       const blob = await response.blob();
-  //       console.log(blob,"<blob object>")
-
-  //       // Create a FormData object to send the Blob data
-  //       const formData = new FormData();
-  //       formData.append('audio', blob, 'audio.mp3'); // Adjust the filename and type as needed
-  //       console.log(formData,"formikkkDAta")
-
-  //       // Prepare the data object to be sent to the API
-  //       const data3 = {
-  //         data: formData,
-  //         method: 'post',
-  //         apiName: 'uploadAudio',
-  //       };
-
-  //       // Dispatch the action with FormData
-  //       dispatch(actions.QUESTIONAUDIOPOST(data3));
-
-  //       onClose();
-  //     } catch (error) {
-  //       console.error('Error fetching or uploading audio:', error);
-  //     }
-  //   }
-  // };
-
-  // const handleInsert = async () => {
-  //   if (audioURL) { // Assuming 'audioURL' is the Blob URL
-  //     try {
-  //       // Fetch the Blob data from the Blob URL
-  //       const response = await fetch(audioURL);
-  //       const blob = await response.blob();
-  //       console.log(blob, "<blob object>"); // Optional: Verify Blob object
-
-  //       // Create a File object from the Blob
-  //       const file = new File([blob], 'censor-beep-10sec-8113.mp3', {
-  //         type: blob.type, // Use the Blob's type or specify a new type
-  //         lastModified: Date.now(), // Set the last modified date
-  //       });
-  //       console.log(file, "<file object>"); // Optional: Verify File object
-
-  //       // Create a FormData object to send the File data
-  //       const formData = new FormData();
-  //       formData.append('audio', file);
-
-  //       console.log(formData.get('audio'), "FormData content"); // Optional: Verify FormData content
-
-  //       // Prepare the data object to be sent to the API
-  //       const data3 = {
-  //         data: formData,
-  //         method: 'post',
-  //         apiName: 'uploadAudio',
-  //       };
-
-  //       // Dispatch the action with FormData
-  //       dispatch(actions.QUESTIONAUDIOPOST(data3));
-
-  //       onClose();
-  //     } catch (error) {
-  //       console.error('Error fetching or uploading audio:', error);
-  //     }
-  //   }
-  // };
 
 
 
@@ -303,6 +228,25 @@ const AudioModal = ({ open, onClose, onAudioInsert, audioURL, setAudioURL, setUp
         setAudioURL(audioUrl); // Correctly set the URL for the audio
         // console.log('Recorded Audio URL:', audioUrl); // Log recorded URL
         setRecording(false);
+
+        function generateFileName(extension = "mp3") {
+          const now = new Date();
+          const timestamp = now.toISOString().replace(/[:.-]/g, ""); // Remove special characters
+          return `recording_${timestamp}.${extension}`;
+        }
+
+        const blob = new Blob([audioBlob], { type: "audio/webm;codecs=opus" });
+
+        // Generate a dynamic file name
+        const fileName = generateFileName("webm"); // Use 'webm' to match your blob's type
+
+        // Create a File object from the Blob
+        const file = new File([blob], fileName, {
+          type: blob.type,
+          lastModified: Date.now(), // You can set the last modified time as needed
+        });
+        setSelectedAudio(file)
+        console.log(file,"my recorder file")
       });
       // console.log('Recording stopped.');
     } else {

@@ -186,8 +186,7 @@ const Header = ({ onMenuClick, isMobile }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" style={{ backgroundColor:"rgba(2, 10, 31)",
-          color:"white",}}>
+      <AppBar position="static" style={{ backgroundColor:"white"}}>
         <Toolbar>
           {/* Menu Button */}
           {isMobile && <IconButton edge="start" color="primary" onClick={onMenuClick}>
@@ -218,7 +217,7 @@ const Header = ({ onMenuClick, isMobile }) => {
             Enter code
           </Button>
           <IconButton color="inherit" style={{ marginLeft: 8 }}>
-            <NotificationsIcon style={{ color: "blue" }} />
+            <NotificationsIcon style={{ color: "#9c27b0" }} />
           </IconButton>
         </Toolbar>
       </AppBar>

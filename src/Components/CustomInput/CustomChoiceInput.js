@@ -781,7 +781,7 @@ const CustomChoiceInput = ({
                     zIndex: 1,
                   }}
                 >
-                  <IconButton
+                  {/* <IconButton
                     color="primary"
                     onClick={handleImageUploadOpen}
                     style={{
@@ -795,7 +795,7 @@ const CustomChoiceInput = ({
                     }}
                   >
                     <Crop style={{ fontSize: "15px" }} />
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                     color="primary"
                     onClick={handleEditClick}

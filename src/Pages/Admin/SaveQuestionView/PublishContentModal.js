@@ -145,6 +145,7 @@ console.log(publishCreateId,"publishCreateId");
     }
   }, [GetAllQuestion, QuestionWithAnsPost.data.question_id, DeleteQuestionById, PublishPost]);
 
+  const sessionStaffId = parseInt(sessionStorage.getItem('sessionStaffId'));
 
 
 
@@ -200,10 +201,12 @@ console.log(publishCreateId,"publishCreateId");
     console.log(values, "publish submit function");
 
     // Prepare data for dispatch
+
+
     const data1 = {
       data: {
         ...values,
-        "staff_id": 1,
+        "staff_id": sessionStaffId,
         "question_ids": questionIds// Use default [45] if no question_ids available
       },
       method: "post",

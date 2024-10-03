@@ -38,6 +38,8 @@ import { GrScorecard } from "react-icons/gr";
 
 
 const UserPuBlishPage = () => {
+    const sessionStudentName = sessionStorage.getItem('sessionStudentName');
+
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState(null);
@@ -64,6 +66,10 @@ const UserPuBlishPage = () => {
 
     const { DeletePublishById } = useSelector((state) => state?.DeletePublishById);
 
+    const { grantAccessToStudent } = useSelector(
+        (state) => state?.grantAccessToStudent
+    );
+
     const handleDeletePublish = (publishid) => {
         if (publishid) {
             const data1 = {
@@ -78,6 +84,8 @@ const UserPuBlishPage = () => {
 
 
     const handleQuizzPlay = (publishid) => {
+        console.log("hiiiiiii");
+        
 
         if (publishid) {
 
@@ -93,17 +101,17 @@ const UserPuBlishPage = () => {
     console.log(StudentScorePost, "StudentScorePost")
 
 
-
+    const sessionStudentId= parseInt(sessionStorage.getItem('sessionStudentId'));
     useEffect(() => {
         const data1 = {
             data: {},
             method: "get",
-            apiName: `getAllPublishesWithStudentScore/student/${1}`,
+            apiName: `getAllPublishesWithStudentScore/student/${sessionStudentId}`,
         };
 
         dispatch(actions.GETALLWITHPUBLISHWITHSTUEDENT(data1));
 
-    }, [])
+    }, [grantAccessToStudent])
 
 
     const [allPublishData, setAllPublishData] = useState([])
@@ -153,9 +161,19 @@ const UserPuBlishPage = () => {
 
     return (
         <Grid sx={{ padding: "20px" }}>
+             {allPublishData.length === 0 && (
+                <h1 style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center"
+                }}>There is no access granted from staff!</h1>
+            )
+            }
             {allPublishData.map((data) =>
                 
-                <Box
+                <Box data-aos="zoom-in" data-aos-duration="1000"
                     sx={{
                         position: 'relative',
                         borderRadius: 1,
@@ -273,7 +291,7 @@ const UserPuBlishPage = () => {
                                     />
                                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                                         <Typography variant="caption" component="a" href="/profile/66c04925271abea6d497c8a1" color="text.primary" sx={{ textDecoration: 'none' }}>
-                                            UserName
+                                            {sessionStudentName}
                                         </Typography>
                                         <Typography variant="caption" color="text.secondary">
                                             <LuDot /> 2days ago

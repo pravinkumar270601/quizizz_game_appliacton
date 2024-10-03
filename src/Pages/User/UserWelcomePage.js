@@ -5,6 +5,7 @@ import { ChevronRight } from '@mui/icons-material';
 import user_bgimage from "../../Assets/user_page.jpg"
 // import { Button } from 'bootstrap';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 
 const subjects = [
@@ -20,6 +21,9 @@ const subjects = [
 ];
 
 const UserWelcomePage = () => {
+    const navigate=useNavigate()
+
+
     return (
         // <Box sx={{ width: '100%', textAlign: 'center', mt: 8, mb: 4,background:`url:${user_bgimage}`}}>
 
@@ -77,6 +81,7 @@ const UserWelcomePage = () => {
                     </Box>
                     <Box sx={{marginTop:"20px"}}>
                         <Button
+                         onClick={()=>navigate("/user/publish")}
                             sx={{
                                 backgroundColor: "#ff4081", // Sets the initial background color
                                 color: "#fff", // White text color

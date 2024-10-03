@@ -89,6 +89,7 @@ import { adminUrl as baseUrl } from '../../constants';
 
 
 const CustomAudioPlayer = ({ updateAudioURL }) => {
+    console.log(updateAudioURL,"updateAudioURLupdateAudioURLupdateAudioURL")
     const theme = useTheme();
     const isLg = useMediaQuery(theme.breakpoints.up('lg'));
     const isSm = useMediaQuery(theme.breakpoints.down('sm'));
@@ -97,6 +98,7 @@ const CustomAudioPlayer = ({ updateAudioURL }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const { QuestionAudioPost } = useSelector((state) => state?.QuestionAudioPost);
     console.log(QuestionAudioPost,"player audio")
+
 
     const handlePlayPause = () => {
         if (isPlaying) {

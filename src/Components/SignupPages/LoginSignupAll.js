@@ -276,6 +276,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import actions from "../../ReduxStore/actions/index";
 import { setInitialStateOfStudentLoginPost } from '../../ReduxStore/Slices/SignUpLoginAll/StudentLoginPost'
 import { setInitialStateOfAdminLoginPost } from '../../ReduxStore/Slices/SignUpLoginAll/AdminLoginPost';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify"
+import { setInitialStateOfAdminSignUpPost } from '../../ReduxStore/Slices/SignUpLoginAll/AdminSignUpPost';
+import { setInitialStateOfStudentSignUpPost } from '../../ReduxStore/Slices/SignUpLoginAll/StudentSignUpPost';
 
 
 
@@ -336,15 +340,16 @@ function LoginSignupAll() {
           gap: 2,
         }}>
         <Button variant={isAdmin ? "contained" : "outlined"} onClick={handleAdminClick}>
-          Admin
+          Staff
         </Button>
         <Button variant={!isAdmin ? "contained" : "outlined"} onClick={handleUserClick}>
-          User
+          Student
         </Button>
       </Box>
 
       {/* Form box */}
       <Box
+       
         sx={{
           width: '40%',
           //   maxWidth: 400,
@@ -358,169 +363,112 @@ function LoginSignupAll() {
           maxHeight: "100%"
 
 
+
         }}>
+
         {isAdmin ? (
           isLogin ? <AdminLogin onToggleForm={handleToggleForm} /> : <AdminSignup onToggleForm={handleToggleForm} />
         ) : (
           isLogin ? <UserLogin onToggleForm={handleToggleForm} /> : <UserSignup onToggleForm={handleToggleForm} />
         )}
+
       </Box>
     </div>
   );
 }
 
-// // Admin Login Form
-// const AdminLogin = ({ onToggleForm }) => {
-//   const navigate = useNavigate();
-
-
-
-//   const AdminLoginSubmit = (values, { resetForm }) => {
-//     console.log("Admin Login Values:", values);
-//     const dispatch = useDispatch();
-//     const { AdminLoginPost } = useSelector((state) => state?.AdminLoginPost);
-
-
-
-//     useEffect(() => {
-
-//       // console.log(StudentLoginPost?.message,"StudentLoginPost?.message.....")
-
-
-//       if (AdminLoginPost?.message === "Login successful") {
-
-//         dispatch(setInitialStateOfAdminLoginPost())
-//         navigate('/admin');
-//       }
-
-//     }, [AdminLoginPost, navigate, dispatch]);
-
-//     const data3 = {
-//       data: { ...values },
-//       method: "post",
-//       apiName: "staffLogin",
-//     };
-//     dispatch(actions.ADMINLOGINPOST(data3));
-
-//     resetForm();
-//     // goToAdminPage();
-//   }
-
-
-//   return (
-//     <Formik
-//       initialValues={{ emailOrPhone: '', password: '' }}
-//       validationSchema={Yup.object({
-//         emailOrPhone: Yup.string()
-//           .required('Required')
-//           .test('is-email-or-phone', 'Invalid email or phone number', function (value) {
-//             const isEmail = Yup.string().email().isValidSync(value);
-//             const isPhone = /^[0-9]+$/.test(value); // Basic phone number validation
-//             return isEmail || isPhone;
-//           }),
-//         password: Yup.string().required('Required'),
-//       })}
-//       onSubmit={AdminLoginSubmit}
-//     >
-//       {({ errors, touched, handleChange, setFieldValue }) => (
-//         <Form>
-//           <Box>
-//             <h2 style={{ textAlign: "center", fontSize: "25px", marginTop: "0", marginBottom: "30px" }}>ADMIN LOGIN</h2>
-//             <CustomInputLogin
-//               name="emailOrPhone"
-//               label="Email"
-//               custPlaceholder="Enter email"
-//               inputType="text"
-//             />
-//             <CustomInputLogin
-//               name="password"
-//               label="Password"
-//               custPlaceholder="Enter password"
-//               inputType="password"
-//             />
-//             <Button fullWidth variant="contained" type="submit">
-//               Login
-//             </Button>
-//             <p style={{ textAlign: "center" }}>
-//               Not registered?{' '}
-//               <a href="#signup" onClick={onToggleForm}>
-//                 Signup here
-//               </a>
-//             </p>
-//           </Box>
-//         </Form>
-//       )}
-//     </Formik>
-//   );
-// };
 
 const AdminLogin = ({ onToggleForm }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { AdminLoginPost } = useSelector((state) => state?.AdminLoginPost);
-  console.log(AdminLoginPost?.message,"messssageeeeeeeeeee")
+  console.log(AdminLoginPost?.message, "messssageeeeeeeeeee")
 
   useEffect(() => {
-    if (AdminLoginPost?.message==="Login successful") {
-    dispatch(setInitialStateOfAdminLoginPost());
-    navigate('/admin');
-  }
-}, [AdminLoginPost, navigate, dispatch]);
+    if (AdminLoginPost?.message === "Login successful") {
+      sessionStorage.setItem('sessionStaffId', AdminLoginPost?.data.staff.staff_id);
+      sessionStorage.setItem('sessionStaffName', AdminLoginPost?.data.staff.staff_name);
+      toast.success("Login Successfully")
+      // console.log( AdminLoginPost?.data.staff.staff_id,"sesstion")
+      dispatch(setInitialStateOfAdminLoginPost());
+      setTimeout(() => navigate('/admin'), 1500)
+      // navigate('/admin');
+    }
+    else if (AdminLoginPost?.message === "staff not found!") {
+      toast.error("staff not found!")
+      dispatch(setInitialStateOfAdminLoginPost());
 
-const AdminLoginSubmit = (values, { resetForm }) => {
-  console.log("Admin Login Values:", values);
+    }
+  }, [AdminLoginPost, navigate, dispatch]);
 
-  const data3 = {
-    data: { ...values },
-    method: "post",
-    apiName: "staffLogin",
+  const AdminLoginSubmit = (values, { resetForm }) => {
+    console.log("Admin Login Values:", values);
+
+    const data3 = {
+      data: { ...values },
+      method: "post",
+      apiName: "staffLogin",
+    };
+    dispatch(actions.ADMINLOGINPOST(data3));
+
+    resetForm();
   };
-  dispatch(actions.ADMINLOGINPOST(data3));
 
-  resetForm();
-};
+  return (
+    <Formik
+      initialValues={{ email: '', password: '' }}  // Updated to use `email`
+      validationSchema={Yup.object({
+        email: Yup.string()
+          .email('Invalid email format')
+          .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Must be a valid Gmail address')
+          .required('Email Required'),
 
-return (
-  <Formik
-    initialValues={{ email: '', password: '' }}  // Updated to use `email`
-    validationSchema={Yup.object({
-      email: Yup.string()
-        .required('Required'),
-
-      password: Yup.string().required('Required'),
-    })}
-    onSubmit={AdminLoginSubmit}
-  >
-    {({ errors, touched, handleChange, setFieldValue }) => (
-      <Form>
-        <Box>
-          <h2 style={{ textAlign: "center", fontSize: "25px", marginTop: "0", marginBottom: "30px" }}>ADMIN LOGIN</h2>
-          <CustomInputLogin
-            name="email"  // Update name to `email`
-            label="Email or Phone"
-            custPlaceholder="Enter email or phone"
-            inputType="text"
+        password: Yup.string().required('Password Required'),
+      })}
+      onSubmit={AdminLoginSubmit}
+    >
+      {({ errors, touched, handleChange, setFieldValue }) => (
+        <Form>
+          <Box >
+            <h2 style={{ textAlign: "center", fontSize: "25px", marginTop: "0", marginBottom: "30px" }}>STAFF LOGIN</h2>
+            <CustomInputLogin
+              name="email"  // Update name to `email`
+              label="Email or Phone"
+              custPlaceholder="Enter email or phone"
+              inputType="text"
+            />
+            <CustomInputLogin
+              name="password"
+              label="Password"
+              custPlaceholder="Enter password"
+              inputType="password"
+            />
+            <Button fullWidth variant="contained" type="submit">
+              Login
+            </Button>
+            <p style={{ textAlign: "center" }}>
+              Not registered?{' '}
+              <a href="#signup" onClick={onToggleForm}>
+                Signup here
+              </a>
+            </p>
+          </Box>
+          <ToastContainer
+            position="top-right" // or "top-center", "bottom-left", etc.
+            autoClose={1500} // Auto close duration in ms
+            hideProgressBar={false} // Hide or show progress bar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
           />
-          <CustomInputLogin
-            name="password"
-            label="Password"
-            custPlaceholder="Enter password"
-            inputType="password"
-          />
-          <Button fullWidth variant="contained" type="submit">
-            Login
-          </Button>
-          <p style={{ textAlign: "center" }}>
-            Not registered?{' '}
-            <a href="#signup" onClick={onToggleForm}>
-              Signup here
-            </a>
-          </p>
-        </Box>
-      </Form>
-    )}
-  </Formik>
-);
+        </Form>
+      )}
+    </Formik>
+  );
 };
 
 
@@ -530,6 +478,20 @@ const AdminSignup = ({ onToggleForm }) => {
   const { AdminSignUpPost } = useSelector((state) => state?.AdminSignUpPost);
 
   console.log(AdminSignUpPost, "AdminSignUpPost");
+
+  useEffect(() => {
+    if (AdminSignUpPost?.message === "Staff registered successfully") {
+      toast.success("Signup Successfully")
+      dispatch(setInitialStateOfAdminSignUpPost())
+      setTimeout(() => onToggleForm(), 1500)
+      // navigate('/admin');
+    } else if (AdminSignUpPost?.message === "Email is already in use. Please use a different email.") {
+
+      toast.error("Email is already exists")
+      dispatch(setInitialStateOfAdminSignUpPost())
+    }
+
+  }, [AdminSignUpPost?.data]);
 
 
   const AdminSignupSubmit = (values, { resetForm }) => {
@@ -545,21 +507,24 @@ const AdminSignup = ({ onToggleForm }) => {
   };
   return (
     <Formik
-      initialValues={{ username: '', email: '', password: '' }}
+      initialValues={{ staff_name: '', email: '', password: '' }}
       validationSchema={Yup.object({
-        username: Yup.string().required('Required'),
-        email: Yup.string().email('Invalid email').required('Required'),
-        password: Yup.string().required('Required'),
+        staff_name: Yup.string().required('Staff name Required'),
+        email: Yup.string()
+          .email('Invalid email format')
+          .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Must be a valid Gmail address')
+          .required('Email Required'),
+        password: Yup.string().required('Password Required'),
       })}
       onSubmit={AdminSignupSubmit}
     >
       {({ errors, touched, handleChange, setFieldValue }) => (
         <Form>
           <Box>
-            <h2 style={{ textAlign: "center", fontSize: "25px", marginTop: "0", marginBottom: "30px" }}>ADMIN SIGNUP</h2>
+            <h2 style={{ textAlign: "center", fontSize: "25px", marginTop: "0", marginBottom: "30px" }}>SATFF SIGNUP</h2>
             <CustomInputLogin
-              name="username"
-              label="User Name"
+              name="staff_name"
+              label="Staff Name"
               custPlaceholder="Enter user name"
               inputType="text"
             />
@@ -585,6 +550,18 @@ const AdminSignup = ({ onToggleForm }) => {
               </a>
             </p>
           </Box>
+          <ToastContainer
+            position="top-right" // or "top-center", "bottom-left", etc.
+            autoClose={1500} // Auto close duration in ms
+            hideProgressBar={false} // Hide or show progress bar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
         </Form>
       )}
     </Formik>
@@ -601,23 +578,31 @@ const UserLogin = ({ onToggleForm }) => {
 
   const { StudentLoginPost } = useSelector((state) => state?.StudentLoginPost);
 
-  // const goToUserPage = () => {
-  //   // console.log(StudentLoginPost?.Message,'messagessss')
-  //   // if (StudentLoginPost?.Message === "Login successful") {
-  //     navigate('/user');
-  //   // }
-  // };
-
-
-
 
   useEffect(() => {
     console.log(StudentLoginPost, "StudentLoginPost");
     // console.log(StudentLoginPost?.message,"StudentLoginPost?.message.....")
 
     if (StudentLoginPost?.message === "Login successful") {
+      sessionStorage.setItem('sessionStudentId', StudentLoginPost?.data.student.student_id);
+      sessionStorage.setItem('sessionStudentName', StudentLoginPost?.data.student.student_name);
+      console.log(StudentLoginPost?.data.student.student_name, "StudentLoginPost?.data.student.student_name");
+
+      toast.success("Login successful")
       dispatch(setInitialStateOfStudentLoginPost())
-      navigate('/user');
+
+      setTimeout(() => navigate('/user'), 1500)
+    } else if (StudentLoginPost?.message === "Invalid email/phone or password") {
+
+      dispatch(setInitialStateOfStudentLoginPost())
+      toast.error("Invalid email/phone")
+
+    }
+    else if (StudentLoginPost?.message === "Invalid password") {
+
+      dispatch(setInitialStateOfStudentLoginPost())
+      toast.error("Invalid password")
+
     }
 
   }, [StudentLoginPost, navigate, dispatch]);
@@ -641,13 +626,18 @@ const UserLogin = ({ onToggleForm }) => {
       initialValues={{ emailOrPhone: '', password: '' }}
       validationSchema={Yup.object({
         emailOrPhone: Yup.string()
-          .required('Required')
+          .required('Email or phone is required')
           .test('is-email-or-phone', 'Invalid email or phone number', function (value) {
             const isEmail = Yup.string().email().isValidSync(value);
-            const isPhone = /^[0-9]+$/.test(value); // Basic phone number validation
-            return isEmail || isPhone;
+            const isPhone = /^[0-9]{10}$/.test(value); // Basic phone number validation (allows 10 to 15 digits)
+
+            if (isEmail) {
+              // If it's a valid email, check if it's a Gmail address
+              return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(value) || this.createError({ message: 'Must be a valid Gmail address' });
+            }
+            return isPhone || this.createError({ message: 'Invalid phone number' });
           }),
-        password: Yup.string().required('Required'),
+        password: Yup.string().required('Password Required'),
       })}
       onSubmit={(values, { resetForm }) => {
         handleLogin(values);
@@ -660,7 +650,7 @@ const UserLogin = ({ onToggleForm }) => {
         <Form>
           <Box>
             <h2 style={{ textAlign: "center", fontSize: "25px", marginTop: "0", marginBottom: "30px" }}>
-              USER LOGIN
+              STUDENT LOGIN
             </h2>
 
             <CustomInputLogin
@@ -685,6 +675,18 @@ const UserLogin = ({ onToggleForm }) => {
               </a>
             </p>
           </Box>
+          <ToastContainer
+            position="top-right" // or "top-center", "bottom-left", etc.
+            autoClose={5000} // Auto close duration in ms
+            hideProgressBar={false} // Hide or show progress bar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
         </Form>
       )}
     </Formik>
@@ -699,6 +701,23 @@ const UserSignup = ({ onToggleForm }) => {
   const { StudentSignUpPost } = useSelector((state) => state?.StudentSignUpPost);
   console.log(StudentSignUpPost, "StudentSignUpPostStudentSignUpPost")
 
+
+  useEffect(() => {
+    if (StudentSignUpPost?.message === "Student registered successfully") {
+      toast.success("Signup Successfully")
+      dispatch(setInitialStateOfStudentSignUpPost())
+      // navigate('/admin');
+      setTimeout(() => onToggleForm(), 1500)
+
+    }
+    else if (StudentSignUpPost?.message === "Email and phone number already in use") {
+      toast.error("Email or phone number already exists")
+      dispatch(setInitialStateOfStudentSignUpPost())
+
+    }
+
+  }, [StudentSignUpPost?.data]);
+
   const handleUserSignUp = (values) => {
     const data3 = {
       data: values,
@@ -712,10 +731,20 @@ const UserSignup = ({ onToggleForm }) => {
     <Formik
       initialValues={{ email: '', password: '', student_name: '', phone_number: '' }}
       validationSchema={Yup.object({
-        email: Yup.string().email('Invalid email').required('Required'),
-        password: Yup.string().required('Required'),
-        phone_number: Yup.string().required('Required'),// add validation for phonenumber
-        student_name: Yup.string().required('Required')
+        email: Yup.string()
+          .email('Invalid email format')
+          .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Must be a valid Gmail address')
+          .required('Email Required'),
+        password: Yup.string()
+          .required('Password Required'),
+        phone_number: Yup.string()
+          .required('phone number Required')
+          .matches(
+            /^[0-9]{10}$/,
+            'Phone number must be between 10 digits'
+          ),
+        student_name: Yup.string()
+          .required('student name Required'),
       })}
       onSubmit={(values, { resetForm }) => {
         handleUserSignUp(values)
@@ -725,9 +754,9 @@ const UserSignup = ({ onToggleForm }) => {
       }}
     >
       {({ errors, touched, handleChange, setFieldValue }) => (
-        <Form>
+        <Form autocomplete="off" >
           <Box>
-            <h2 style={{ textAlign: "center", fontSize: "25px", marginTop: "0", marginBottom: "30px" }}>USER SIGNUP</h2>
+            <h2 style={{ textAlign: "center", fontSize: "25px", marginTop: "0", marginBottom: "30px" }}>STUDENT SIGNUP</h2>
 
             <CustomInputLogin
               name="student_name"
@@ -753,6 +782,7 @@ const UserSignup = ({ onToggleForm }) => {
               label="Password"
               custPlaceholder="Enter password"
               inputType="password"
+
             />
             <Button fullWidth variant="contained" type="submit">
               Signup
@@ -764,6 +794,18 @@ const UserSignup = ({ onToggleForm }) => {
               </a>
             </p>
           </Box>
+          <ToastContainer
+            position="top-right" // or "top-center", "bottom-left", etc.
+            autoClose={1500} // Auto close duration in ms
+            hideProgressBar={false} // Hide or show progress bar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
         </Form>
       )}
     </Formik>

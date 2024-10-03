@@ -1030,9 +1030,10 @@ const SaveQuestionView = () => {
 
   const dispatch = useDispatch()
   const { PublishPost } = useSelector((state) => state?.PublishPost);
+  const sessionStaffId = parseInt(sessionStorage.getItem('sessionStaffId'));
 
   useEffect(() => {
-    const data = { data: {}, method: "get", apiName: `getQuestionsWithoutPublishByStaffId/staff/${1}` };
+    const data = { data: {}, method: "get", apiName: `getQuestionsWithoutPublishByStaffId/staff/${sessionStaffId}` };
     // console.log("Dispatching LOCATIONMOVIEDROPDOWN action:", data);
     dispatch(actions.GETALLQUESTION(data));
 
@@ -1093,6 +1094,7 @@ const SaveQuestionView = () => {
 
 
   const container1 = GetAllQuestion?.data?.map((data) => {
+    console.log(data.options,"dataoptions")
     // Determine the media type and URL
     let mediaType;
     let mediaUrl;
@@ -1139,33 +1141,42 @@ const SaveQuestionView = () => {
       console.error('Error parsing correctAnswer:', error);
     }
   
-    const imageUrl = JSON.parse(data.optionsImageUrl) || []; // Default to empty array if null
-  
+    // const imageUrl = data.options.map((option)=>option.image  ); // Default to empty array if null
+  // console.log(imageUrl,"imageUrlimageUrlimageUrl") 
     // Return the mapped object for each question
     return {
       questionText: data.questionText,
       mediaType: mediaType, // Assign media type
       mediaUrl: mediaUrl,   // Assign media URL
-      imageUrls: imageUrl,
+      imageUrls: [],
       question_id: data.question_id,
       questionType: JSON.parse(data.questionType),
       questionPoint: JSON.parse(data.questionPoint),
       questionTiming: JSON.parse(data.questionTiming),
       choices: Array.isArray(options) ? options.map((optionText, index) => {
         // Get the corresponding image URL for the option
-        const optionImageUrl = imageUrl[index] || null;
+        // const optionImageUrl = imageUrl[index] || null;
   
         // Check if the current option (text and image) is in the correctAnswers array
-        const isCorrect = correctAnswers.some(
-          (correctAnswer) =>
-            correctAnswer &&
-            ((correctAnswer.text && optionText && correctAnswer.text.trim() === optionText.trim()) ||
-             (correctAnswer.image && optionImageUrl && correctAnswer.image === optionImageUrl))
-        );
-  
+        // const isCorrect = correctAnswers.some(
+        //   (correctAnswer) =>
+        //     correctAnswer &&
+        //     ((correctAnswer.text && optionText && correctAnswer.text.trim() === optionText.trim()) ||
+        //      (correctAnswer.image && optionImageUrl && correctAnswer.image === optionImageUrl))
+        // );
+        console.log(correctAnswers,"correctAnswerscorrectAnswerscorrectAnswerscorrectAnswerscorrectAnswers")
+
+        const isCorrect = correctAnswers.filter(correctAnswer =>
+          correctAnswer &&
+          (
+            (correctAnswer.text && optionText && correctAnswer.text === optionText.text) || 
+            (correctAnswer.image && optionText && correctAnswer.image === optionText.image)
+          )
+        ).length > 0;
+        
         return {
-          imageurl: optionImageUrl,  // Assign specific image URL if available
-          text: optionText,
+          imageurl: optionText.image,  // Assign specific image URL if available
+          text: optionText.text,
           correct: isCorrect ? 'true' : 'false',  // Mark the correct option
         };
       }) : [], // Default to empty array if options is not an array
@@ -1232,7 +1243,7 @@ const SaveQuestionView = () => {
     >
       {({ setFieldValue }) => (
         <Form>
-          <Box sx={{ minHeight: '100vh', backgroundColor: 'rgb(242 242 242)' }}>
+          <Box sx={{ minHeight: '100vh', backgroundColor: 'rgb(242 242 242)' }} >
             {/* Header */}
             <Box
               component="header"
@@ -1390,7 +1401,7 @@ const SaveQuestionView = () => {
 
 
               {container1?.map((container, index) => (
-                <Grid container spacing={2} key={index} mb={3}>
+                <Grid container spacing={2} key={index} mb={3} data-aos="flip-up" data-aos-duration="1000">
                   <Grid item xs={12}>
                     <Paper
                       sx={{
@@ -1541,7 +1552,7 @@ const SaveQuestionView = () => {
                                   ) : (
                                     <IoIosCloseCircle style={{ height: "25px", width: "30px", color: 'red' }} />
                                   )}
-                                  {choice.imageurl !== null ? (
+                                  {choice.imageurl !== "" ? (
                                     <>
                                       <Box
                                         component="img"

@@ -44,7 +44,14 @@ const QuestionVideoPostSlice = createSlice({
       error: false, 
     },
   },
-  reducers: {},
+  reducers: {
+    setInitialStateOfQuestionVideoPost: (state) => {
+      state.QuestionVideoPost.loading = false
+      state.QuestionVideoPost.error = false
+      state.QuestionVideoPost.data = []
+      state.QuestionVideoPost.message = ''
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(QUESTIONVIDEOPOST.fulfilled, (state, action) => {
       state.QuestionVideoPost = {
@@ -79,3 +86,4 @@ const QuestionVideoPostAction = {
 
 export { QuestionVideoPostAction };
 export default QuestionVideoPostSlice.reducer;
+export const {setInitialStateOfQuestionVideoPost} = QuestionVideoPostSlice.actions

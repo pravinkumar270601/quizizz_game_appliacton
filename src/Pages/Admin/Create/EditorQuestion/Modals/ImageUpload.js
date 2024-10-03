@@ -3855,10 +3855,10 @@ const styles = {
     },
 };
 
-const ImageUpload = ({ open, onClose, onCrop, setCroppedImage, setQuestionImage }) => {
+const ImageUpload = ({ open, onClose, onCrop, setCroppedImage, setQuestionImage ,image, setImage}) => {
     const dispatch = useDispatch();
     const [tabIndex, setTabIndex] = useState(0);
-    const [image, setImage] = useState(null)
+    // const [image, setImage] = useState(null)
 
     const cropperRef = useRef(null);
     const imageInputRef = useRef(null);

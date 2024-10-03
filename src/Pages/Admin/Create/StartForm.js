@@ -163,6 +163,9 @@
 
 import React from 'react';
 import { Box, Typography, Paper, IconButton } from '@mui/material';
+import pre_book_image from "../../../Assets/pre_made_questions.png"
+import create_from_scratch from "../../../Assets/create_from_scratch.png"
+
 
 const StartForm = ({ onComponentSelect }) => {
   return (
@@ -210,7 +213,7 @@ const StartForm = ({ onComponentSelect }) => {
       >
         <IconButton sx={{ p: 0, width: 40, height: 40 }}>
           <img
-            src="https://cf.quizizz.com/CreateWithAIV2/pre_made_questions.png"
+            src={pre_book_image}
             alt="Import worksheets"
             style={{ borderRadius: 'inherit', width: '100%', height: '100%' }}
           />
@@ -237,7 +240,7 @@ const StartForm = ({ onComponentSelect }) => {
       >
         <IconButton sx={{ p: 0, width: 40, height: 40 }}>
           <img
-            src="https://cf.quizizz.com/CreateWithAIV2/create_from_scratch.png"
+            src={create_from_scratch}
             alt="Create from scratch"
             style={{ borderRadius: 'inherit', width: '100%', height: '100%' }}
           />

@@ -27,6 +27,10 @@ import AdminSignUpPostSlice from '../Slices/SignUpLoginAll/AdminSignUpPost';
 import getAllStudentsSlice from '../Slices/Student/getAllStudents' 
 import grantAccessToStudentSlice from '../Slices/Student/grantAccessToStudent';
 import StudentLoginPostSlice from '../Slices/SignUpLoginAll/StudentLoginPost';
+import GetStudentInfoByPublishIdSlice from '../Slices/StudentInfo/GetStudentInfoByPublishId';
+import GrantAccessToMultiStudentPostSlice from '../Slices/Student/GrantAccessToMultiStudentPost';
+import RevokeAccessToMultiStudentPostSlice from '../Slices/Student/RevokeAccessToStudentPost';
+import UserReportGetAllStudentSlice from '../Slices/StudentInfo/UserReportGetAllStudent';
 
 const reducer = combineReducers({
 
@@ -57,6 +61,10 @@ const reducer = combineReducers({
   AdminLoginPost: AdminLoginPostSlice,
   getAllStudents: getAllStudentsSlice,
   grantAccessToStudent: grantAccessToStudentSlice,
+  GetStudentInfoByPublishId:GetStudentInfoByPublishIdSlice,
+  GrantAccessToMultiStudentPost:GrantAccessToMultiStudentPostSlice,
+  RevokeAccessToMultiStudentPost:RevokeAccessToMultiStudentPostSlice,
+  UserReportGetAllStudent:UserReportGetAllStudentSlice,
 
 
 });

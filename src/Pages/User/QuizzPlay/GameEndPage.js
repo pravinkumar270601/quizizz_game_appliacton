@@ -130,11 +130,12 @@ const GameEndPage = ({ score ,quizplaypublishid}) => {
     const { StudentScorePost } = useSelector((state) => state?.StudentScorePost);
     console.log(StudentScorePost, "StudentScorePost")
 
+    const sessionStudentId= parseInt(sessionStorage.getItem('sessionStudentId'));
 
     useEffect(() => {
         const data3 = {
             data: {
-                "student_id": 1,
+                "student_id": sessionStudentId,
                 "publish_id": quizplaypublishid,
                 "score": score,
                 "status": "completed"
@@ -252,6 +253,7 @@ const GameEndPage = ({ score ,quizplaypublishid}) => {
                         <Button
                             variant="contained"
                             color="primary"
+                            onClick={handleReturnPublish}
 
                             sx={{
                                 padding: 2,
@@ -260,7 +262,7 @@ const GameEndPage = ({ score ,quizplaypublishid}) => {
                                 minWidth: 200,
                             }}
                         >
-                            <Typography variant="button" onClick={handleReturnPublish} sx={{ fontWeight: "bold" }}>
+                            <Typography variant="button"  sx={{ fontWeight: "bold" }}>
                                 Go to Publish
                             </Typography>
                         </Button>

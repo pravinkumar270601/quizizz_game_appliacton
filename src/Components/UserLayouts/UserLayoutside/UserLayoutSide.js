@@ -13,6 +13,8 @@ import UserWelcomePage from '../../../Pages/User/UserWelcomePage';
 import UserPuBlishPage from '../../../Pages/User/UserPuBlishPage.js/UserPuBlishPage';
 import PendingPage from '../../../Pages/User/UserPuBlishPage.js/PendingPage';
 import CompletedPage from '../../../Pages/User/UserPuBlishPage.js/CompletedPage';
+import HeaderUser from '../../SideNav/HeaderUser';
+
 
 const UserLayoutSide = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -35,7 +37,7 @@ const UserLayoutSide = () => {
           justifyContent: "space-between"
         }}
       >
-        <Header onMenuClick={handleMenuClick} isMobile={isMobile} />
+        <HeaderUser onMenuClick={handleMenuClick} isMobile={isMobile} />
         <Box
           component="main"
           sx={{ flexGrow: 1, background: "rgb(242 242 242)" }}
@@ -53,6 +55,8 @@ const UserLayoutSide = () => {
             {/* <Route path="/mylibrary" element={<MyLibrary />} /> */}
             <Route path="/completed-quizz" element={< CompletedPage />} />
             <Route path="/pending-quizz" element={< PendingPage />} />
+            
+            
           </Routes>
         </Box>
       </Box>

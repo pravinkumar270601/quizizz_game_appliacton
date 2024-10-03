@@ -229,6 +229,7 @@ const GameEndPage = ({score}) => {
                         <Button
                             variant="contained"
                             color="primary"
+                            onClick={handleReturnPublish}
 
                             sx={{
                                 padding: 2,
@@ -237,7 +238,7 @@ const GameEndPage = ({score}) => {
                                 minWidth: 200,
                             }}
                         >
-                            <Typography variant="button" onClick={handleReturnPublish} sx={{ fontWeight: "bold" }}>
+                            <Typography variant="button"  sx={{ fontWeight: "bold" }}>
                                Go to Publish
                             </Typography>
                         </Button>

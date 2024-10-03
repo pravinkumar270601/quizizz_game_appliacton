@@ -567,6 +567,8 @@ const FillintheBlank = ({ textColor ,setApiPostData}) => {
 
     // State to manage dynamically added boxes
     const [boxes, setBoxes] = useState(DEFAULT_BOXES);
+  const sessionStaffId = parseInt(sessionStorage.getItem('sessionStaffId'));
+
 
     const formik = useFormik({
         initialValues: {
@@ -589,6 +591,7 @@ const FillintheBlank = ({ textColor ,setApiPostData}) => {
     const { QuestionVideoPost } = useSelector((state) => state?.QuestionVideoPost);
 
     const [answerWith,setAnswerWith]=useState([])
+    console.log(answerWith,"answerWithanswerWithanswerWithanswerWith")
     
   useEffect(() => {
     // setIsQuestionEntered(formik.values.question.trim() !== '');
@@ -598,13 +601,16 @@ const FillintheBlank = ({ textColor ,setApiPostData}) => {
 
 
     setApiPostData({
-      staff_id: "1",
+      staff_id: sessionStaffId,
       questionText: formik.values.question,
       questionImage: questionImage,
       questionAudioUrl: QuestionAudioPost.data.audioUrl,
       questionVideoUrl: QuestionVideoPost.data.videoUrl,
-      correctAnswer: [answerWith],
-      optionTexts: [answerWith],
+    //   correctAnswer: [answerWith],
+    correctAnswer: [{text:answerWith,image:""}],
+
+    //   optionTexts: [answerWith],
+    optionTexts: [{text:answerWith,image:""}],
       
     });
 
@@ -988,7 +994,7 @@ console.log(answerWith,"answerWitha11111")
                                 </Paper>
                             </Box>
                         </Box>
-                        <Button onClick={handleSubmit}>submit</Button>
+                        <Button onClick={handleSubmit} type='submit'>submit</Button>
                     </Form>
                 )}
             </Formik>

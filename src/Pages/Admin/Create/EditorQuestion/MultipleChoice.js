@@ -1,7 +1,5 @@
 
 
-
-
 // // // // import React, { useState, useEffect } from 'react';
 // // // // import CustomInputIcon from "../../../../Components/CustomInput/CustomInputIcon";
 // // // // import CustomChoiceInput from '../../../../Components/CustomInput/CustomChoiceInput';
@@ -2368,9 +2366,11 @@ import Spinner from './Spinner'; // Import the Spinner component
 import "../../../../Components/CustomInput/CustomChoiceInput.css";
 import ImageUpload from './Modals/ImageUpload';
 import { BorderColor } from '@mui/icons-material';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { adminUrl as baseUrl } from "../../../../constants";
 import actions from "../../../../ReduxStore/actions/index";
+import { setInitialStateOfQuestionImageUpload } from '../../../../ReduxStore/Slices/QuestionEdit/QuestionImageUpload';
+import { setInitialStateOfImageUploadPost } from '../../../../ReduxStore/Slices/QuestionEdit/ImageUploadPost';
 
 
 const BootstrapTooltip = styled(({ className, bgColor, ...props }) => (
@@ -2406,7 +2406,7 @@ const CustomButton = styled(Button)(({ theme, isLg, isMd }) => ({
   },
 }));
 
-const MultipleChoice = ({ textColor, handleSubmitapicheck, setApiPostData, setQuestionFeild,setQuestionImage,questionImage }) => {
+const MultipleChoice = ({ textColor, handleSubmitapicheck, setApiPostData, setQuestionFeild, setQuestionImage, questionImage }) => {
   const dispatch = useDispatch();
   const isLg = useMediaQuery(theme => theme.breakpoints.up('lg'));
   const isXs = useMediaQuery(theme => theme.breakpoints.down('xs'));
@@ -2483,25 +2483,54 @@ const MultipleChoice = ({ textColor, handleSubmitapicheck, setApiPostData, setQu
   const { QuestionAudioPost } = useSelector((state) => state?.QuestionAudioPost);
   console.log(QuestionAudioPost, "QuestionAudioPost.data.audioUrl");
 
+
+  const sessionStaffId = parseInt(sessionStorage.getItem('sessionStaffId'));
+
+  // console.log(choices,"choiceschoiceschoiceschoiceschoices")
+  const optionsTexts = choices
+  .map((choice, index) => ({
+    text: formik.values[`choice_${index}_text`], 
+    image: formik.values[`choice_${index}_image`]
+  }))
+  .filter(option => option.text || option.image); // Filter out any options that have neither text nor image
+
+console.log(optionsTexts,"optionsTextsoptionsTextsoptionsTextsoptionsTexts");
+
   useEffect(() => {
     // setIsQuestionEntered(formik.values.question.trim() !== '');
     setIsQuestionEntered(formik.values.question || formik.values.questionImage.trim() !== '');
     setIsOptionEntered(choices.some((choice, index) => formik.values[`choice_${index}_text`].trim() !== ''));
 
+    console.log(choices,"choiceschoiceschoiceschoiceschoices")
 
 
     setApiPostData({
-      staff_id: "1",
+      staff_id: sessionStaffId,
       questionText: formik.values.question,
       questionImage: questionImage,
       questionAudioUrl: QuestionAudioPost.data.audioUrl,
       questionVideoUrl: QuestionVideoPost.data.videoUrl,
+      // optionTexts: choices
+      //   .map((_, index) => formik.values[`choice_${index}_text`])
+      //   .filter(text => text),  // Filters out empty texts
+      // optionImages: choices
+      //   .map((_, index) => formik.values[`choice_${index}_image`])
+      //   // .filter(image => image) || "" ,
+      //  .filter(image => image && image.trim() !== "") || [],
+
+      // optionTexts:choices
+      //  .map((_,index) => ({
+      //   text: formik.values[`choice_${index}_text`],
+      //   image: formik.values[`choice_${index}_image`]
+      // }))
+      // .filter(value => value.text || value.image),
+
       optionTexts: choices
-        .map((_, index) => formik.values[`choice_${index}_text`])
-        .filter(text => text),  // Filters out empty texts
-      optionImages: choices
-        .map((_, index) => formik.values[`choice_${index}_image`])
-        .filter(image => image),  // Filters out empty images
+      .map((choice, index) => ({
+        text: formik.values[`choice_${index}_text`], 
+        image: formik.values[`choice_${index}_image`]
+      }))
+      .filter(option => option.text || option.image),
 
       correctAnswer: correctChoices
         .map((index) => ({
@@ -2509,10 +2538,11 @@ const MultipleChoice = ({ textColor, handleSubmitapicheck, setApiPostData, setQu
           image: formik.values[`choice_${index}_image`]
         }))
         .filter(value => value.text || value.image),
-      questionType: "multichose",
-      questionPoint: "5 point",
-      questionTiming: "5 seconde"
+      // questionType: "multichose",
+      // questionPoint: "5 point",
+      // questionTiming: "5 seconde"
     });
+    
 
   }, [formik.values, choices, correctChoices]);
 
@@ -2573,8 +2603,8 @@ const MultipleChoice = ({ textColor, handleSubmitapicheck, setApiPostData, setQu
   // const { ImageUploadPost } = useSelector((state) => state?.ImageUploadPost);
   // const { QuestionImageUpload } = useSelector((state) => state?.QuestionImageUpload);
 
-  
- 
+
+
 
   // const handleImageCrop = (formData) => {
 
@@ -2603,34 +2633,44 @@ const MultipleChoice = ({ textColor, handleSubmitapicheck, setApiPostData, setQu
   // };
 
   const { ImageUploadPost } = useSelector((state) => state?.ImageUploadPost);
-const { QuestionImageUpload } = useSelector((state) => state?.QuestionImageUpload);
+  console.log(ImageUploadPost, 'ImageUploadPost-');
 
-// Function to handle image cropping
-const handleImageCrop = (formData) => {
-  console.log("The choice image crop function is working");
 
-  const data3 = {
-    data: formData, // Pass FormData object here
-    method: "post",
-    apiName: "uploadImage",
+  const { QuestionImageUpload } = useSelector((state) => state?.QuestionImageUpload);
+  console.log(QuestionImageUpload, "QuestionImageUploadQuestionImageUpload")
+
+  // Function to handle image cropping
+  const handleImageCrop = (formData) => {
+    console.log("The choice image crop function is working");
+
+    const data3 = {
+      data: formData, // Pass FormData object here
+      method: "post",
+      apiName: "uploadImage",
+    };
+
+    // Dispatch the image upload action
+    dispatch(actions.IMAGEUPLOADPOST(data3));
   };
 
-  // Dispatch the image upload action
-  dispatch(actions.IMAGEUPLOADPOST(data3));
-};
+  // Use useEffect to monitor changes in ImageUploadPost and update the image URL
 
-// Use useEffect to monitor changes in ImageUploadPost and update the image URL
-useEffect(() => {
-  if (currentChoiceIndex !== null && ImageUploadPost?.data?.imageUrl) {
-    const imageUrl = ImageUploadPost.data.imageUrl;
-    const newChoices = [...choices];
-    newChoices[currentChoiceIndex].image = `${baseUrl}${imageUrl}`;
-    setChoices(newChoices);
+  const [image, setImage] = useState(null)
+  useEffect(() => {
+    if (currentChoiceIndex !== null && ImageUploadPost?.data?.imageUrl) {
+      const imageUrl = ImageUploadPost.data.imageUrl;
+      const newChoices = [...choices];
+      newChoices[currentChoiceIndex].image = `${baseUrl}${imageUrl}`;
+      setChoices(newChoices);
 
-    console.log(currentChoiceIndex, "Image crop success");
-    formik.setFieldValue(`choice_${currentChoiceIndex}_image`, `${baseUrl}${imageUrl}`);
-  }
-}, [ImageUploadPost, currentChoiceIndex]);
+      console.log(currentChoiceIndex, "Image crop success");
+      formik.setFieldValue(`choice_${currentChoiceIndex}_image`, `${baseUrl}${imageUrl}`);
+      dispatch(setInitialStateOfImageUploadPost())
+      setImage(null)
+    }
+
+
+  }, [ImageUploadPost, currentChoiceIndex, dispatch]);
 
   const handleTextChange = (index, text) => {
     const newChoices = [...choices];
@@ -2911,7 +2951,7 @@ useEffect(() => {
             </CustomButton>
           </ButtonGroup>
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           {loading ? (
             <Spinner />
           ) : (
@@ -2923,11 +2963,12 @@ useEffect(() => {
               Submit
             </Button>
           )}
-        </Grid>
+        </Grid> */}
       </Grid>
 
       <ImageUpload
-
+        image={image}
+        setImage={setImage}
         open={openImageUpload}
         onClose={handleImageUploadClose}
         onCrop={handleImageCrop} // Handle the cropped image

@@ -294,6 +294,12 @@ const DocumentComponent = () => <div>Document Content</div>;
 const TextComponent = () => <div>Text Questions Content</div>;
 
 const MyLibrary = () => {
+    const sessionStaffId = parseInt(sessionStorage.getItem('sessionStaffId'));
+    
+    console.log(sessionStaffId,"sessionStaffId");
+    
+    const { AdminLoginPost } = useSelector((state) => state?.AdminLoginPost);
+    console.log(AdminLoginPost,"AdminLoginPost>>>>>>>>>>")
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -358,7 +364,7 @@ const MyLibrary = () => {
     ];
    
     return (
-        <Grid container spacing={2} sx={{ width: '100%', display: "flex", justifyContent: "space-between" }}>
+        <Grid container spacing={2} sx={{ width: '100%', display: "flex", justifyContent: "space-between" }} >
             {/* Sidebar */}
             <Grid item xs={12} md={3} >
                 <Box sx={{ mb: 2 }}>
